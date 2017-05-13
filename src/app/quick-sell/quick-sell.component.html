@@ -1,0 +1,82 @@
+<div class="container">
+  <div class="row">
+    <h2 class="text-center">Relatório Detalhado</h2>
+  </div>
+  <div class="row" style="margin-bottom: 15px">
+    <form name="formFilterQuickSellReport" class="form">
+      <div class="row">
+        <div class="col-lg-2 col-md-2 form-group">
+          <label for="inputQuickSellReportDateFrom" class="label-control">De:</label>
+          <input type="date" class="form-control" name="dateFrom" id="inputQuickSellReportDateFrom"
+                 [(ngModel)]="quickSellReportFilter.dateFrom">
+        </div>
+        <div class="col-lg-2 col-md-2 form-group">
+          <label for="inputQuickSellReportDateTo" class="label-control">Até:</label>
+          <input type="date" class="form-control" name="dateTo" id="inputQuickSellReportDateTo"
+                 [(ngModel)]="quickSellReportFilter.dateTo">
+        </div>
+        <div class="col-lg-4 col-md-4 form-group">
+          <label for="inputQuickSellReportClient" class="label-control">Cliente:</label>
+          <select name="inputQuickSellReportClient" id="inputQuickSellReportClient" class="form-control"
+                  [(ngModel)]="quickSellReportFilter.client">
+            <option *ngFor="let client of clients" [ngValue]="client">{{client.name}}</option>
+          </select>
+        </div>
+        <div class="col-lg-3 col-md-3 form-group">
+          <label for="inputQuickSellReportProduct" class="label-control">Produto:</label>
+          <select name="inputQuickSellReportProduct" id="inputQuickSellReportProduct" class="form-control"
+            [(ngModel)]="quickSellReportFilter.product">
+            <option *ngFor="let product of products" [ngValue]="product">{{product.name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12 col-md-12 form-group">
+          <button type="button" class="btn btn-primary pull-right" (click)="searchQuickSellReport()">
+            <span class="fa fa-search"></span> Pesquisar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="row">
+    <div class="col-lg-12 col-md-12">
+      <tabset>
+        <tab heading="Resumo">
+          <table *ngIf="listQuickSell.length > 0" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+              <th class="text-center">Cód.</th>
+              <th>Data</th>
+              <th>Hora</th>
+              <th class="text-center">Tipo</th>
+              <th class="text-left">Cliente</th>
+              <th class="text-center">Caixa</th>
+              <th class="text-center">Total/Desc.</th>
+              <th class="text-center">Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let quickSell of listQuickSell">
+              <td class="text-center">{{quickSell.id}}</td>
+              <td>{{getConvertedDate(quickSell.sellDate)}}</td>
+              <td>{{quickSell.schedule}}</td>
+              <td class="text-center">{{quickSell.type}}</td>
+              <td class="text-left">{{quickSell.client.name}}</td>
+              <td class="text-center">{{quickSell.cashier}}</td>
+              <td class="text-center">{{quickSell.totalWithDescount}}</td>
+              <td class="text-center">{{quickSell.total}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </tab>
+        <tab heading="Detalhamento">
+          <app-quick-sell-product (notify)="onNotify()" [dateFrom]="quickSellReportFilter.dateFrom" [dateTo]="quickSellReportFilter.dateTo">
+
+          </app-quick-sell-product>
+        </tab>
+      </tabset>
+
+    </div>
+  </div>
+</div>
