@@ -1,0 +1,26 @@
+<div class="row" *ngIf="quickSell && quickSell.listProductQuickSell">
+  <div class="col-lg-12 col-md-12">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Barra</th>
+          <th>Nome</th>
+          <th>CFOP</th>
+          <th class="text-center">Quant.</th>
+          <th class="text-center">Valor</th>
+          <th class="text-center">Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let productQuickSell of quickSell.listProductQuickSell">
+          <td>{{productQuickSell.product.barCode}}</td>
+          <td>{{productQuickSell.product.name}}</td>
+          <td>{{productQuickSell.cfop}}</td>
+          <td class="text-center">{{productQuickSell.quantity}}</td>
+          <td class="text-center">{{productQuickSell.value}}</td>
+          <td class="text-center">{{productQuickSell.subTotal}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

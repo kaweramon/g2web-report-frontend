@@ -1,0 +1,65 @@
+<div class="container" *ngIf="quickSell">
+  <div class="row">
+    <div class="col-lg-12 col-md-12">
+      <h2>
+        Produtos
+        <span class="fa fa-shopping-cart"></span>
+      </h2>
+    </div>
+  </div>
+  <div *ngFor="let productQuickSell of quickSell.listProductQuickSell">
+    <div class="row">
+      <div class="col-lg-3 col-md-4">
+        <label for="textQuickSellProductBarCode" class="label-control">Barra:</label>
+        <span id="textQuickSellProductBarCode">{{productQuickSell.product.barCode}}</span>
+      </div>
+      <div class="col-lg-3 col-md-4">
+        <label for="textQuickSellProductName" class="label-control">Descrição:</label>
+        <span id="textQuickSellProductName">{{productQuickSell.product.name}}</span>
+      </div>
+      <div class="col-lg-1 col-md-1">
+        <label for="textQuickSellProductCFOP" class="label-control">CFOP:</label>
+        <span id="textQuickSellProductCFOP">{{productQuickSell.cfop}}</span>
+      </div>
+      <div class="col-lg-2 col-md-2">
+        <label for="textQuickSellProductQuantity" class="label-control">Quant.</label>
+        <span id="textQuickSellProductQuantity">{{productQuickSell.quantity}}</span>
+      </div>
+      <div class="col-lg-1 col-md-1">
+        <label for="textQuickSellProductValue" class="label-control">Valor:</label>
+        <span id="textQuickSellProductValue">{{productQuickSell.value}}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-2 col-md-2">
+        <label for="textQuickSellProductSubtotal" class="label-control">Subtotal:</label>
+        <span id="textQuickSellProductSubtotal">{{productQuickSell.subTotal}}</span>
+      </div>
+      <div class="col-lg-1 col-md-1" *ngIf="productQuickSell.percentPIS">
+        <label for="textQuickSellProductPercentPIS" class="label-control">% PIS:</label>
+        <span id="textQuickSellProductPercentPIS">{{productQuickSell.percentPIS}}</span>
+      </div>
+      <div class="col-lg-1 col-md-1" *ngIf="productQuickSell.percentCofins">
+        <label for="textQuickSellProductPercentCofins" class="label-control">% Cofins:</label>
+        <span id="textQuickSellProductPercentCofins">{{productQuickSell.percentCofins}}</span>
+      </div>
+      <div class="col-lg-2 col-md-2">
+        <label for="textQuickSellProductAliquotICMS" class="label-control">Aliq. ICMS:</label>
+        <span id="textQuickSellProductAliquotICMS">{{productQuickSell.aliquotICMS}}</span>
+      </div>
+      <div class="col-lg-2 col-md-2" *ngIf="productQuickSell.product.productOther?.freightValue">
+        <label for="textQuickSellProductFreightValue" class="label-control">Valor/Frete:</label>
+        <span id="textQuickSellProductFreightValue">{{productQuickSell.product.productOther.freightValue}}</span>
+      </div>
+      <div class="col-lg-2 col-md-2" *ngIf="productQuickSell.product.productOther?.insuranceValue">
+        <label for="textQuickSellProductInsuranceValue" class="label-control">Valor/Seguro:</label>
+        <span id="textQuickSellProductInsuranceValue">{{productQuickSell.product.productOther.insuranceValue}}</span>
+      </div>
+      <div class="col-lg-2 col-md-2" *ngIf="productQuickSell.product.productOther?.discountValue">
+        <label for="textQuickSellProductDiscount" class="label-control">Desconto:</label>
+        <span id="textQuickSellProductDiscount">{{productQuickSell.product.productOther.discountValue}}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
