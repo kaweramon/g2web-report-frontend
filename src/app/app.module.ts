@@ -15,22 +15,42 @@ import {TextMaskModule} from 'angular2-text-mask';
 import {ProductGroupService} from './product/product-group.service';
 import {ProductFamilyService} from './product/product-family.service';
 import { QuickSellDetailsComponent } from './quick-sell/quick-sell-details/quick-sell-details.component';
+import { SightSaleComponent } from './sight-sale/sight-sale.component';
+import { ProductSightSaleComponent } from './sight-sale/product-sight-sale/product-sight-sale.component';
+import { ReportFiltersComponent } from './report-filters/report-filters.component';
+import {SightSaleService} from './sight-sale/sight-sale.service';
+import { SightSaleDetailsComponent } from './sight-sale/sight-sale-details/sight-sale-details.component';
+import { SaleResumeComponent } from './sale-resume/sale-resume.component';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 @NgModule({
   declarations: [
     AppComponent,
     QuickSellComponent,
     ProductQuickSellComponent,
-    QuickSellDetailsComponent
+    QuickSellDetailsComponent,
+    SightSaleComponent,
+    ProductSightSaleComponent,
+    ReportFiltersComponent,
+    SightSaleDetailsComponent,
+    SaleResumeComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     TabsModule.forRoot(),
-    TextMaskModule
+    TextMaskModule,
+    NgxPaginationModule
   ],
-  providers: [QuickSellService, ClientService, ProductService, ProductGroupService, ProductFamilyService],
+  providers: [
+    QuickSellService,
+    ClientService,
+    ProductService,
+    ProductGroupService,
+    ProductFamilyService,
+    SightSaleService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

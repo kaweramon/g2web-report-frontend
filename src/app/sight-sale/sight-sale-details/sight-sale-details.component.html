@@ -1,0 +1,146 @@
+<div class="container" *ngIf="sightSale">
+  <div class="row">
+    <div class="panel panel-default" style="margin-bottom: 0px;">
+      <div class="panel-heading">
+        <h2 class="panel-title">
+          Produtos
+          <span class="fa fa-shopping-cart"></span>
+        </h2>
+      </div>
+      <div class="panel-body" style="background-color: #FFFFAB; color: #ff9900;" *ngIf="sightSale.listProductSightSale">
+        <div class="row" *ngFor="let productSightSale of sightSale.listProductSightSale">
+          <div class="col-lg-12 col-md-12">
+            <div class="row">
+              <div class="col-lg-1 col-md-1">
+                <label for="textSightSaleProductId" class="label-control">Cód.:</label>
+                <span id="textSightSaleProductId">{{productSightSale.product.id}}</span>
+              </div>
+              <div class="col-lg-3 col-md-3">
+                <label for="textSightSaleProductName" class="label-control">Nome:</label>
+                <span id="textSightSaleProductName">{{productSightSale.product.name}}</span>
+              </div>
+              <div class="col-lg-3 col-md-3">
+                <label for="textSightSaleProductBarCode" class="label-control">Barra:</label>
+                <span id="textSightSaleProductBarCode">{{productSightSale.product.barCode}}</span>
+              </div>
+              <div class="col-lg-1 col-md-1">
+                <label for="textSightSaleProductQuantity" class="label-control">Quant.:</label>
+                <span id="textSightSaleProductQuantity">{{productSightSale.quantity}}</span>
+              </div>
+              <div class="col-lg-1 col-md-1">
+                <label for="textSightSaleProductValue" class="label-control">Valor:</label>
+                <span id="textSightSaleProductValue">{{productSightSale.value}}</span>
+              </div>
+              <div class="col-lg-2 col-md-2">
+                <label for="textSightSaleProductSubtotal" class="label-control">Subtotal:</label>
+                <span id="textSightSaleProductSubtotal">{{productSightSale.subTotal}}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-1 col-md-1">
+                <label for="textSightSaleProductCst" class="label-control">CST:</label>
+                <span id="textSightSaleProductCst">{{productSightSale.cst}}</span>
+              </div>
+              <div class="col-lg-3 col-md-3">
+                <label for="textSightSaleProductCfop" class="label-control">CFOP:</label>
+                <span id="textSightSaleProductCfop">{{productSightSale.cfop}}</span>
+              </div>
+              <div class="col-lg-3 col-md-3">
+                <label for="textSightSaleProductNCM" class="label-control">NCM:</label>
+                <span id="textSightSaleProductNCM">{{productSightSale.ncm}}</span>
+              </div>
+              <div class="col-lg-2 col-md-2">
+                <label for="textSightProductGroup" class="label-control">Grupo:</label>
+                <span id="textSightProductGroup">{{productSightSale.product.productGroup.name}}</span>
+              </div>
+              <div class="col-lg-2 col-md-2">
+                <label for="textSightProductFamily" class="label-control">Família:</label>
+                <span id="textSightProductFamily">{{productSightSale.product.productFamily.name}}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-4 col-md-4" *ngIf="productSightSale.aliquotICMS">
+                <label for="textSightProductAliquotICMS" class="label-control">Aliq. ICMS:</label>
+                <span id="textSightProductAliquotICMS">{{productSightSale.aliquotICMS}}</span>
+              </div>
+              <div class="col-lg-3 col-md-3" *ngIf="productSightSale.product.productOther?.freightValue">
+                <label for="textSightProductFreightValue" class="label-control">Val./Frete:</label>
+                <span id="textSightProductFreightValue">{{productSightSale.product.productOther?.freightValue}}</span>
+              </div>
+              <div class="col-lg-2 col-md-2" *ngIf="productSightSale.product.productOther?.insuranceValue">
+                <label for="textSightProductInsuranceValue" class="label-control">Val./Seguro:</label>
+                <span id="textSightProductInsuranceValue">{{productSightSale.product.productOther?.insuranceValue}}</span>
+              </div>
+              <div class="col-lg-2 col-md-2" *ngIf="productSightSale.product.productOther.discountValue">
+                <label for="textSightProductDiscountValue" class="label-control">Val./Seguro:</label>
+                <span id="textSightProductDiscountValue">{{productSightSale.product.productOther?.discountValue}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="sightSale.client">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h2 class="panel-title">
+          Cliente
+          <span class="fa fa-user"></span>
+        </h2>
+      </div>
+      <div class="panel-body" style="background-color: #FFFFAB; color: #ff9900;">
+        <div class="row">
+          <div class="col-lg-1 col-md-1">
+            <label for="textSightSaleClientId" class="label-control">Cód.:</label>
+            <span id="textSightSaleClientId">{{sightSale.client.id}}</span>
+          </div>
+          <div class="col-lg-3 col-md-3">
+            <label for="textSightSaleClientName" class="label-control">Nome:</label>
+            <span id="textSightSaleClientName">{{sightSale.client.name}}</span>
+          </div>
+          <div class="col-lg-3 col-md-3" *ngIf="sightSale.client.cpf">
+            <label for="textSightSaleClientCPF" class="label-control">CPF:</label>
+            <span id="textSightSaleClientCPF">{{sightSale.client.cpf}}</span>
+          </div>
+          <div class="col-lg-3 col-md-3" *ngIf="sightSale.client.cnpj">
+            <label for="textSightSaleClientCNPJ" class="label-control">CNPJ:</label>
+            <span id="textSightSaleClientCNPJ">{{sightSale.client.cnpj}}</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4 col-md-4">
+            <label for="textSightSaleClientAddress" class="label-control">Endereço:</label>
+            <span id="textSightSaleClientAddress">{{sightSale.client.address}}</span>
+          </div>
+          <div class="col-lg-3 col-md-3" *ngIf="sightSale.client.complement">
+            <label for="textSightSaleClientComplement" class="label-control">Comp.:</label>
+            <span id="textSightSaleClientComplement">{{sightSale.client.complement}}</span>
+          </div>
+          <div class="col-lg-1 col-md-1">
+            <label for="textSightSaleClientAddressNumber" class="label-control">Nº:</label>
+            <span id="textSightSaleClientAddressNumber">{{sightSale.client.addressNumber}}</span>
+          </div>
+          <div class="col-lg-3 col-md-3">
+            <label for="textSightSaleClientCity" class="label-control">Cidade:</label>
+            <span id="textSightSaleClientCity">{{sightSale.client.city}}</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4 col-md-4">
+            <label for="textSightSaleClientNeighborhood" class="label-control">Bairro:</label>
+            <span id="textSightSaleClientNeighborhood">{{sightSale.client.neighborhood}}</span>
+          </div>
+          <div class="col-lg-4 col-md-4" *ngIf="sightSale.client.cel1">
+            <label for="textSightSaleClientCel1" class="label-control">Tel 1:</label>
+            <span id="textSightSaleClientCel1">{{sightSale.client.cel1}}</span>
+          </div>
+          <div class="col-lg-4 col-md-4" *ngIf="sightSale.client.cel2">
+            <label for="textSightSaleClientCel2" class="label-control">Tel 2:</label>
+            <span id="textSightSaleClientCel2">{{sightSale.client.cel2}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

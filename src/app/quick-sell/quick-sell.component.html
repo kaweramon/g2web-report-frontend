@@ -1,173 +1,53 @@
-<div class="container">
-  <div class="row">
-    <h2 class="text-center">Relatório Detalhado</h2>
-  </div>
-  <div class="row" style="margin-bottom: 15px">
-    <form name="formFilterQuickSellReport" class="form">
-      <div class="row">
-        <div class="col-lg-8 col-md-8">
-          <div class="row">
-            <div class="col-lg-3 col-md-3 form-group">
-              <label for="inputQuickSellReportDateFrom" class="label-control">De:</label>
-              <input type="date" class="form-control" name="dateFrom" id="inputQuickSellReportDateFrom"
-                     [(ngModel)]="quickSellReportFilter.dateFrom">
-            </div>
-            <div class="col-lg-3 col-md-3 form-group">
-              <label for="inputQuickSellReportDateTo" class="label-control">Até:</label>
-              <input type="date" class="form-control" name="dateTo" id="inputQuickSellReportDateTo"
-                     [(ngModel)]="quickSellReportFilter.dateTo">
-            </div>
-            <div class="col-lg-6 col-md-6 form-group">
-              <label for="inputQuickSellFilterType" class="label-control">Filtro:</label>
-              <select name="filterSelected" id="inputQuickSellFilterType" class="form-control" [(ngModel)]="filterSelected">
-                <option value=""></option>
-                <option value="client">Cliente</option>
-                <option value="product">Produto</option>
-                <option value="cashier">Caixa</option>
-                <option value="nfeKey">Chave/Nfe</option>
-                <option value="coo">Num/NF</option>
-                <option value="id">Código/Venda</option>
-                <option value="productGroupFamily">Grupo/Família</option>
-              </select>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-3 col-md-3 form-group">
-              <label for="inputQuickSellReportFromSchedule" class="label-control">Hr/Início:</label>
-              <input type="text" [textMask]="{mask: hourMask}" class="form-control" name="fromSchedule" id="inputQuickSellReportFromSchedule"
-                     [(ngModel)]="quickSellReportFilter.fromSchedule">
-            </div>
-            <div class="col-lg-3 col-md-3 form-group">
-              <label for="inputQuickSellReportToSchedule" class="label-control">Hr/Final:</label>
-              <input type="text" [textMask]="{mask: hourMask}" class="form-control" name="toScedule" id="inputQuickSellReportToSchedule"
-                     [(ngModel)]="quickSellReportFilter.toSchedule">
-            </div>
-            <div class="col-lg-6 col-md-6 form-group" *ngIf="filterSelected === 'client'">
-              <label for="inputQuickSellReportClient" class="label-control">Cliente:</label>
-              <select name="inputQuickSellReportClient" id="inputQuickSellReportClient" class="form-control"
-                      [(ngModel)]="quickSellReportFilter.client" (change)="insertFilter('Cliente', quickSellReportFilter.client.name)">
-                <option *ngFor="let client of clients" [ngValue]="client">{{client.name}}</option>
-              </select>
-            </div>
-            <div class="col-lg-6 col-md-6 form-group" *ngIf="filterSelected === 'product'">
-              <label for="inputQuickSellReportProduct" class="label-control">Produto:</label>
-              <select name="inputQuickSellReportProduct" id="inputQuickSellReportProduct"
-                      class="form-control" [(ngModel)]="quickSellReportFilter.product"
-                      (change)="insertFilter('Produto', quickSellReportFilter.product.name)">
-                <option *ngFor="let product of products" [ngValue]="product">{{product.name}}</option>
-              </select>
-            </div>
-            <div class="col-lg-3 col-md-3 form-group" *ngIf="filterSelected === 'cashier'">
-              <label for="inputQuickSellReportCashier" class="label-control">Caixa:</label>
-              <input type="number" class="form-control" name="cashier" [(ngModel)]="quickSellReportFilter.cashier"
-                     (keyup)="insertFilter('Caixa', quickSellReportFilter.cashier)" id="inputQuickSellReportCashier">
-            </div>
-            <div class="col-lg-6 col-md-6 form-group" *ngIf="filterSelected === 'nfeKey'">
-              <label for="inputQuickSellReportNfeKey" class="label-control">Chave</label>
-              <input type="text" class="form-control" [(ngModel)]="quickSellReportFilter.nfeKey" name="nfeKey"
-                    (keyup.enter)="insertFilter('Chave', quickSellReportFilter.nfeKey)" id="inputQuickSellReportNfeKey">
-            </div>
-            <div class="col-lg-3 col-md-3 form-group" *ngIf="filterSelected === 'id'">
-              <label for="inputQuickSellReportId" class="label-control">Código:</label>
-              <input type="number" id="inputQuickSellReportId" class="form-control" name="id"
-                     [(ngModel)]="quickSellReportFilter.id" (keyup.enter)="insertFilter('Código', quickSellReportFilter.id)">
-            </div>
-            <div class="col-lg-3 col-md-3 form-group" *ngIf="filterSelected === 'coo'">
-              <label for="inputQuickSellReportCoo" class="label-control">Nº NF:</label>
-              <input type="number" id="inputQuickSellReportCoo" class="form-control" name="coo"
-                     (keyup.enter)="insertFilter('Nº Nota', quickSellReportFilter.coo)"
-                     [(ngModel)]="quickSellReportFilter.coo">
-            </div>
-            <div class="col-lg-3 col-md-3 form-group" *ngIf="filterSelected === 'productGroupFamily'">
-              <label for="inputQuickSellReportProductGroup" class="label-control">Grupo:</label>
-              <select name="productGroup" id="inputQuickSellReportProductGroup" class="form-control"
-                  [(ngModel)]="quickSellReportFilter.productGroupId"
-                      (change)="listProdFamilyByGroup(); insertFilter('Grupo', quickSellReportFilter.productGroupId)">
-                <option *ngFor="let productGroup of productGroups" [value]="productGroup.id">{{productGroup.name}}</option>
-              </select>
-            </div>
-            <div class="col-lg-3 col-md-3 form-group" *ngIf="filterSelected === 'productGroupFamily'">
-              <label for="inputQuickSellFilterProductFamily" class="label-control">Família:</label>
-              <select (change)="insertFilter('Família', quickSellReportFilter.productFamilyId)" name="productFamily"
-                      id="inputQuickSellFilterProductFamily" class="form-control"
-                      [(ngModel)]="quickSellReportFilter.productFamilyId">
-                <option *ngFor="let productFamily of productFamilies" [value]="productFamily.id">
-                  {{productFamily.name}}
-                </option>
-              </select>
-            </div>
+<app-report-filters [reportType]="reportType" (notify)="onNotify($event)"></app-report-filters>
+<div class="row" *ngIf="listQuickSell.length > 0">
+  <div class="col-lg-12 col-md-12">
+    <tabset>
+      <tab heading="Resumo">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th class="text-center">Cód.</th>
+              <th class="text-center">Data/Hora</th>
+              <th class="text-center">Tipo</th>
+              <th class="text-left">Cliente</th>
+              <th class="text-center">Caixa</th>
+              <th class="text-left">Chave NFE</th>
+              <th class="text-center">Total/Desc.</th>
+              <th class="text-center">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let quickSell of listQuickSell | paginate: { itemsPerPage: 5, currentPage: p }"
+              id="quickSellRow_{{quickSell.id}}"
+              (click)="selectRow($event, quickSell, quickSell.id)">
+            <td class="text-center">{{quickSell.id}}</td>
+            <td>{{getConvertedDate(quickSell.sellDate)}} &nbsp; {{quickSell.schedule}}</td>
+            <td class="text-center">{{quickSell.type}}</td>
+            <td class="text-left">{{quickSell.client.name}}</td>
+            <td class="text-center">{{quickSell.cashier}}</td>
+            <td class="text-left">{{quickSell.nfeKey}}</td>
+            <td class="text-center">{{quickSell.totalWithDescount}}</td>
+            <td class="text-center">{{quickSell.total}}</td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="row">
+          <div class="col-lg-12 col-md-12">
+            <pagination-controls previousLabel="Anterior"
+                                 nextLabel="Próximo"
+                                 (pageChange)="p = $event">
+            </pagination-controls>
           </div>
         </div>
-        <div class="col-lg-4 col-md-4 form-group" *ngIf="listFilters.length > 0">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              Filtros Inseridos:
-            </div>
-            <div class="panel-body">
-              <div class="row no-margin no-padding" *ngFor="let filter of listFilters">
-                <div class="col-lg-3 col-md-3 no-padding no-margin">
-                  {{filter.type}}
-                </div>
-                <div class="col-lg-8 col-md-8 no-padding no-margin">
-                  {{filter.filter}}
-                </div>
-                <div class="col-lg-1 col-md-1">
-                  <span (click)="removeFilter(filter)" class="fa fa-trash pull-right"></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-12 col-md-12 form-group">
-          <button type="button" class="btn btn-primary pull-right" (click)="searchQuickSellReport()">
-            <span class="fa fa-search"></span> Pesquisar
-          </button>
-        </div>
-      </div>
-    </form>
-  </div>
-  <div class="row">
-    <div class="col-lg-12 col-md-12">
-      <tabset>
-        <tab heading="Resumo">
-          <table *ngIf="listQuickSell.length > 0" class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th class="text-center">Cód.</th>
-                <th>Data/Hora</th>
-                <th class="text-center">Tipo</th>
-                <th class="text-left">Cliente</th>
-                <th class="text-center">Caixa</th>
-                <th class="text-left">Chave NFE</th>
-                <th class="text-center">Total/Desc.</th>
-                <th class="text-center">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let quickSell of listQuickSell" id="quickSellRow_{{quickSell.id}}"
-                  (click)="selectRow($event, quickSell, quickSell.id)">
-                <td class="text-center">{{quickSell.id}}</td>
-                <td>{{getConvertedDate(quickSell.sellDate)}} &nbsp; {{quickSell.schedule}}</td>
-                <td class="text-center">{{quickSell.type}}</td>
-                <td class="text-left">{{quickSell.client.name}}</td>
-                <td class="text-center">{{quickSell.cashier}}</td>
-                <td class="text-left">{{quickSell.nfeKey}}</td>
-                <td class="text-center">{{quickSell.totalWithDescount}}</td>
-                <td class="text-center">{{quickSell.total}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </tab>
-        <tab heading="Produtos">
-          <app-product-quick-sell [quickSell]="quickSellSelected"></app-product-quick-sell>
-        </tab>
-        <tab heading="Detalhamento">
-          <app-quick-sell-details [quickSell]="quickSellSelected"></app-quick-sell-details>
-        </tab>
-      </tabset>
-
-    </div>
+        <app-sale-resume [saleResume]="saleResume"></app-sale-resume>
+      </tab>
+      <tab heading="Produtos">
+        <app-product-quick-sell [quickSell]="quickSellSelected"></app-product-quick-sell>
+      </tab>
+      <tab heading="Detalhamento">
+        <app-quick-sell-details [quickSell]="quickSellSelected"></app-quick-sell-details>
+      </tab>
+    </tabset>
   </div>
 </div>
+

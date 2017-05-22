@@ -1,0 +1,26 @@
+<div class="row" *ngIf="sightSale?.listProductSightSale">
+  <div class="col-lg-12 col-md-12">
+    <table class="table table-bordered table-striped">
+      <thead>
+      <tr>
+        <th>Barra</th>
+        <th>Nome</th>
+        <th class="text-center">CFOP</th>
+        <th class="text-center">Quant.</th>
+        <th class="text-center">Valor</th>
+        <th class="text-center">Subtotal</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let productSightSale of sightSale.listProductSightSale">
+        <td>{{productSightSale.product.barCode}}</td>
+        <td>{{productSightSale.product.name}}</td>
+        <td class="text-center">{{productSightSale.cfop}}</td>
+        <td class="text-center">{{productSightSale.quantity}}</td>
+        <td class="text-center">{{productSightSale.value}}</td>
+        <td class="text-center">{{productSightSale.subTotal}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

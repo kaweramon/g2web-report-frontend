@@ -11,5 +11,5 @@ export class QuickSell {
   public client: Client;
   public cashier: number;
   public nfeKey: string;
-  public listProductQuickSell: Array<ProductQuickSell>[];
+  public listProductQuickSell: Array<ProductQuickSell>;
 }

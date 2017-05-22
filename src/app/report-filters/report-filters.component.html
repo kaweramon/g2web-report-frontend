@@ -1,0 +1,126 @@
+<div class="col-lg-12 col-md-12">
+  <form name="formFilterQuickSellReport" class="form">
+    <div class="row">
+      <div class="col-lg-8 col-md-8" style="background-color: #FFFFAB;">
+        <div class="row">
+          <div class="col-lg-3 col-md-3 form-group">
+            <label for="inputQuickSellReportDateFrom" class="label-control">De:</label>
+            <input type="text" [textMask]="{mask: dateMask}" class="form-control" id="inputQuickSellReportDateFrom"
+                   name="dateFrom" [(ngModel)]="reportFilters.dateFrom" placeholder="dd/mm/aaaa">
+          </div>
+          <div class="col-lg-3 col-md-3 form-group">
+            <label for="inputQuickSellReportDateTo" class="label-control">Até:</label>
+            <input type="text" [textMask]="{mask: dateMask}" class="form-control" id="inputQuickSellReportDateTo"
+                   name="dateTo" [(ngModel)]="reportFilters.dateTo" placeholder="dd/mm/aaaa">
+          </div>
+          <div class="col-lg-6 col-md-6 form-group">
+            <label for="inputQuickSellFilterType" class="label-control">Filtro:</label>
+            <select name="filterSelected" id="inputQuickSellFilterType" class="form-control" [(ngModel)]="filterSelected">
+              <option value=""></option>
+              <option value="client">Cliente</option>
+              <option value="product">Produto</option>
+              <option value="cashier">Caixa</option>
+              <option value="nfeKey">Chave/Nfe</option>
+              <option value="coo">Num/NF</option>
+              <option value="id">Código/Venda</option>
+              <option value="productGroupFamily">Grupo/Família</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3 col-md-3 form-group">
+            <label for="inputQuickSellReportFromSchedule" class="label-control">Hr/Início:</label>
+            <input type="text" [textMask]="{mask: hourMask}" class="form-control" name="fromSchedule" id="inputQuickSellReportFromSchedule"
+                   [(ngModel)]="reportFilters.fromSchedule">
+          </div>
+          <div class="col-lg-3 col-md-3 form-group">
+            <label for="inputQuickSellReportToSchedule" class="label-control">Hr/Final:</label>
+            <input type="text" [textMask]="{mask: hourMask}" class="form-control" name="toScedule" id="inputQuickSellReportToSchedule"
+                   [(ngModel)]="reportFilters.toSchedule">
+          </div>
+          <div class="col-lg-6 col-md-6 form-group" *ngIf="filterSelected === 'client'">
+            <label for="inputQuickSellReportClient" class="label-control">Cliente:</label>
+            <select name="inputQuickSellReportClient" id="inputQuickSellReportClient" class="form-control"
+                    [(ngModel)]="reportFilters.client" (change)="insertFilter('Cliente', reportFilters.client.name)">
+              <option *ngFor="let client of clients" [ngValue]="client">{{client.name}}</option>
+            </select>
+          </div>
+          <div class="col-lg-6 col-md-6 form-group" *ngIf="filterSelected === 'product'">
+            <label for="inputQuickSellReportProduct" class="label-control">Produto:</label>
+            <select name="inputQuickSellReportProduct" id="inputQuickSellReportProduct"
+                    class="form-control" [(ngModel)]="reportFilters.product"
+                    (change)="insertFilter('Produto', reportFilters.product.name)">
+              <option *ngFor="let product of products" [ngValue]="product">{{product.name}}</option>
+            </select>
+          </div>
+          <div class="col-lg-3 col-md-3 form-group" *ngIf="filterSelected === 'cashier'">
+            <label for="inputQuickSellReportCashier" class="label-control">Caixa:</label>
+            <input type="number" class="form-control" name="cashier" [(ngModel)]="reportFilters.cashier"
+                   (keyup)="insertFilter('Caixa', reportFilters.cashier)" id="inputQuickSellReportCashier">
+          </div>
+          <div class="col-lg-6 col-md-6 form-group" *ngIf="filterSelected === 'nfeKey'">
+            <label for="inputQuickSellReportNfeKey" class="label-control">Chave</label>
+            <input type="text" class="form-control" [(ngModel)]="reportFilters.nfeKey" name="nfeKey"
+                   (keyup.enter)="insertFilter('Chave', reportFilters.nfeKey)" id="inputQuickSellReportNfeKey">
+          </div>
+          <div class="col-lg-3 col-md-3 form-group" *ngIf="filterSelected === 'id'">
+            <label for="inputQuickSellReportId" class="label-control">Código:</label>
+            <input type="number" id="inputQuickSellReportId" class="form-control" name="id"
+                   [(ngModel)]="reportFilters.id" (keyup.enter)="insertFilter('Código', reportFilters.id)">
+          </div>
+          <div class="col-lg-3 col-md-3 form-group" *ngIf="filterSelected === 'coo'">
+            <label for="inputQuickSellReportCoo" class="label-control">Nº NF:</label>
+            <input type="number" id="inputQuickSellReportCoo" class="form-control" name="coo"
+                   (keyup.enter)="insertFilter('Nº Nota', reportFilters.coo)"
+                   [(ngModel)]="reportFilters.coo">
+          </div>
+          <div class="col-lg-3 col-md-3 form-group" *ngIf="filterSelected === 'productGroupFamily'">
+            <label for="inputQuickSellReportProductGroup" class="label-control">Grupo:</label>
+            <select name="productGroup" id="inputQuickSellReportProductGroup" class="form-control"
+                    [(ngModel)]="reportFilters.productGroupId"
+                    (change)="listProdFamilyByGroup(); insertFilter('Grupo', reportFilters.productGroupId)">
+              <option *ngFor="let productGroup of productGroups" [value]="productGroup.id">{{productGroup.name}}</option>
+            </select>
+          </div>
+          <div class="col-lg-3 col-md-3 form-group" *ngIf="filterSelected === 'productGroupFamily'">
+            <label for="inputQuickSellFilterProductFamily" class="label-control">Família:</label>
+            <select (change)="insertFilter('Família', reportFilters.productFamilyId)" name="productFamily"
+                    id="inputQuickSellFilterProductFamily" class="form-control"
+                    [(ngModel)]="reportFilters.productFamilyId">
+              <option *ngFor="let productFamily of productFamilies" [value]="productFamily.id">
+                {{productFamily.name}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-4 form-group" *ngIf="listFilters.length > 0">
+        <div class="panel panel-default">
+          <div class="panel-heading" >
+            Filtros Inseridos:
+          </div>
+          <div class="panel-body" style="background-color: #FFFFAB; color: #ff9900;">
+            <div class="row no-margin no-padding" *ngFor="let filter of listFilters">
+              <div class="col-lg-2 col-md-2 no-padding no-margin">
+                {{filter.type}}
+              </div>
+              <div class="col-lg-8 col-md-8 no-padding no-margin">
+                {{filter.filter}}
+              </div>
+              <div class="col-lg-2 col-md-2 no-padding no-margin">
+                <span (click)="removeFilter(filter)" class="fa fa-trash pull-right"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 form-group">
+        <button type="button" class="btn btn-primary pull-right" (click)="buildSearchQuery()">
+          <span class="fa fa-search"></span> Pesquisar
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

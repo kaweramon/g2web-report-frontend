@@ -1,0 +1,56 @@
+<app-report-filters [reportType]="sightSale" (notify)="onNotify($event)"></app-report-filters>
+<div class="row" *ngIf="listSightSale.length > 0">
+  <div class="col-lg-12 col-md-12">
+    <tabset>
+      <tab heading="Resumo">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th class="text-center">Cód.</th>
+              <th class="text-center">COO</th>
+              <th class="text-center">Data/Hora</th>
+              <th class="text-center">Tipo</th>
+              <th class="text-left">Cliente</th>
+              <th class="text-center">Caixa</th>
+              <th class="text-left">Chave NFE</th>
+              <th class="text-center">Total/Desc.</th>
+              <th class="text-center">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let sightSale of listSightSale | paginate: { itemsPerPage: 5, currentPage: p }" id="sightSaleRow_{{sightSale.id}}"
+                (click)="selectRow($event, sightSale, sightSale.id)">
+              <td class="text-center">{{sightSale.id}}</td>
+              <td class="text-center">{{sightSale.coo}}</td>
+              <td class="text-center">
+                {{getConvertedDate(sightSale.sellDate, 'DD/MM/YYYY')}} &nbsp; {{sightSale.schedule}}
+              </td>
+              <td class="text-center">{{sightSale.type}}</td>
+              <td class="text-left">{{sightSale.client.name}}</td>
+              <td class="text-center">{{sightSale.cashier}}</td>
+              <td class="text-left">{{sightSale.nfeKey}}</td>
+              <td class="text-center">{{sightSale.totalDiscount}}</td>
+              <td class="text-center">{{sightSale.total}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="row">
+          <div class="col-lg-12 col-md-12">
+            <pagination-controls previousLabel="Anterior"
+                                 nextLabel="Próximo"
+                                 (pageChange)="p = $event">
+            </pagination-controls>
+          </div>
+        </div>
+        <app-sale-resume [saleResume]="saleResume"></app-sale-resume>
+      </tab>
+      <tab heading="Produtos">
+        <app-product-sight-sale [sightSale]="sightSaleSelected"></app-product-sight-sale>
+      </tab>
+      <tab heading="Detalhamento">
+        <app-sight-sale-details [sightSale]="sightSaleSelected"></app-sight-sale-details>
+      </tab>
+    </tabset>
+
+  </div>
+</div>

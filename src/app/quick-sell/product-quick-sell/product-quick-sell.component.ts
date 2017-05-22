@@ -6,16 +6,13 @@ import {QuickSell} from '../quick-sell';
   templateUrl: './product-quick-sell.component.html',
   styleUrls: ['./product-quick-sell.component.css']
 })
-export class ProductQuickSellComponent implements OnInit {
+export class ProductQuickSellComponent {
 
   @Input()
   public quickSell: QuickSell;
 
   constructor() {
     this.quickSell = new QuickSell();
-  }
-
-  ngOnInit() {
   }
 
 }

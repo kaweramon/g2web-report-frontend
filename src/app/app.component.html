@@ -1,1 +1,19 @@
-<app-quick-sell></app-quick-sell>
+<div class="container">
+  <div class="row">
+    <h2 class="text-center">Relatório Detalhado</h2>
+  </div>
+  <div class="row">
+    <div class="col-lg-12 col-md-12">
+      <label class="label-control">Categoria:</label>
+      <input type="radio" name="inputReportCategory" value="quickSell" [(ngModel)]="reportCategorySelect"> Venda Rápida
+      <input type="radio" name="inputReportCategory" value="sightSale" [(ngModel)]="reportCategorySelect"> Venda NFe/Outros
+    </div>
+  </div>
+  <div *ngIf="reportCategorySelect === 'quickSell'">
+    <app-quick-sell></app-quick-sell>
+  </div>
+  <div *ngIf="reportCategorySelect === 'sightSale'">
+    <app-sight-sale></app-sight-sale>
+  </div>
+</div>
+
