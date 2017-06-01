@@ -11,6 +11,8 @@ export class QuickSellDetailsComponent {
   @Input()
   public quickSell: QuickSell;
 
-  constructor() { }
+  constructor() {
+    this.quickSell = new QuickSell();
+  }
 
 }

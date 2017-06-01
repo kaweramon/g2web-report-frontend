@@ -8,7 +8,7 @@
         <div class="row">
           <div class="col-lg-3 col-md-3" *ngIf="saleResume.saleTotal && saleResume.saleTotal !== 0">
             <label for="textSaleResumeSaleTotal" class="label-control">Total de Vendas:</label>
-            <span id="textSaleResumeSaleTotal">R$&nbsp;{{saleResume.saleTotal}}</span>
+            <span id="textSaleResumeSaleTotal">R{{saleResume.saleTotal | currency:'USD':true:'1.2-2'}}</span>
           </div>
           <div class="col-lg-3 col-md-3">
             <label for="textSaleResumeNumTotalSales">Total de Produtos:</label>
@@ -17,12 +17,12 @@
           <div class="col-lg-3 col-md-3"
                *ngIf="saleResume.productTotalPriceCost && saleResume.productTotalPriceCost !== 0">
             <label for="textSaleResumeProductTotalPriceCost">Total de Custos:</label>
-            <span id="textSaleResumeProductTotalPriceCost">R$&nbsp;{{saleResume.productTotalPriceCost}}</span>
+            <span id="textSaleResumeProductTotalPriceCost">R{{saleResume.productTotalPriceCost | currency:'USD':true:'1.2-2'}}</span>
           </div>
           <div class="col-lg-3 col-md-3"
                *ngIf="saleResume.productTotalDiscountValue && saleResume.productTotalDiscountValue !== 0">
             <label for="textSaleResumeProductTotalDiscountValue">Total Com Descontos:</label>
-            <span id="textSaleResumeProductTotalDiscountValue">R$&nbsp;{{saleResume.productTotalDiscountValue}}</span>
+            <span id="textSaleResumeProductTotalDiscountValue">R{{saleResume.productTotalDiscountValue | currency:'USD':true:'1.2-2'}}</span>
           </div>
         </div>
       </div>

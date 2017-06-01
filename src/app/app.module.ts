@@ -22,6 +22,8 @@ import {SightSaleService} from './sight-sale/sight-sale.service';
 import { SightSaleDetailsComponent } from './sight-sale/sight-sale-details/sight-sale-details.component';
 import { SaleResumeComponent } from './sale-resume/sale-resume.component';
 import {NgxPaginationModule} from 'ngx-pagination';
+import {routing} from "./app.routes";
+import { ReportComponent } from './report/report.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import {NgxPaginationModule} from 'ngx-pagination';
     ProductSightSaleComponent,
     ReportFiltersComponent,
     SightSaleDetailsComponent,
-    SaleResumeComponent
+    SaleResumeComponent,
+    ReportComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +44,8 @@ import {NgxPaginationModule} from 'ngx-pagination';
     HttpModule,
     TabsModule.forRoot(),
     TextMaskModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    routing
   ],
   providers: [
     QuickSellService,

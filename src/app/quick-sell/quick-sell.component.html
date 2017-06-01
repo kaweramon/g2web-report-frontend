@@ -26,8 +26,8 @@
             <td class="text-left">{{quickSell.client.name}}</td>
             <td class="text-center">{{quickSell.cashier}}</td>
             <td class="text-left">{{quickSell.nfeKey}}</td>
-            <td class="text-center">{{quickSell.totalWithDescount}}</td>
-            <td class="text-center">{{quickSell.total}}</td>
+            <td class="text-center">R{{quickSell.totalWithDescount | currency:'USD':true:'1.2-2'}}</td>
+            <td class="text-center">R{{quickSell.total | currency:'USD':true:'1.2-2'}}</td>
           </tr>
           </tbody>
         </table>
