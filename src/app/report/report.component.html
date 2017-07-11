@@ -7,6 +7,7 @@
       <label class="label-control">Categoria:</label>
       <input type="radio" name="inputReportCategory" value="quickSell" [(ngModel)]="reportCategorySelect"> Venda Rápida
       <input type="radio" name="inputReportCategory" value="sightSale" [(ngModel)]="reportCategorySelect"> Venda NFe/Outros
+      <input type="radio" name="inputReportCategory" value="liberation" [(ngModel)]="reportCategorySelect"> Liberação Cliente
     </div>
   </div>
   <div *ngIf="reportCategorySelect === 'quickSell'">
@@ -14,5 +15,8 @@
   </div>
   <div *ngIf="reportCategorySelect === 'sightSale'">
     <app-sight-sale></app-sight-sale>
+  </div>
+  <div *ngIf="reportCategorySelect === 'liberation'">
+    <app-liberation></app-liberation>
   </div>
 </div>

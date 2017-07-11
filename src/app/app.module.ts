@@ -24,6 +24,9 @@ import { SaleResumeComponent } from './sale-resume/sale-resume.component';
 import {NgxPaginationModule} from 'ngx-pagination';
 import {routing} from "./app.routes";
 import { ReportComponent } from './report/report.component';
+import { LiberationComponent } from './liberation/liberation.component';
+import {LiberationService} from "./liberation/liberation.service";
+import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 
 @NgModule({
   declarations: [
@@ -36,7 +39,8 @@ import { ReportComponent } from './report/report.component';
     ReportFiltersComponent,
     SightSaleDetailsComponent,
     SaleResumeComponent,
-    ReportComponent
+    ReportComponent,
+    LiberationComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +49,8 @@ import { ReportComponent } from './report/report.component';
     TabsModule.forRoot(),
     TextMaskModule,
     NgxPaginationModule,
-    routing
+    routing,
+    SlimLoadingBarModule.forRoot()
   ],
   providers: [
     QuickSellService,
@@ -53,7 +58,8 @@ import { ReportComponent } from './report/report.component';
     ProductService,
     ProductGroupService,
     ProductFamilyService,
-    SightSaleService
+    SightSaleService,
+    LiberationService
   ],
   bootstrap: [AppComponent]
 })

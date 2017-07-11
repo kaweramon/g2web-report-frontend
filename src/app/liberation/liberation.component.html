@@ -1,0 +1,96 @@
+<div class="col-lg-12 col-md-12">
+  <form name="formFilterQuickSellReport" class="form">
+    <div class="row">
+      <div class="col-lg-8 col-md-8" style="background-color: #FFFFAB;">
+        <div class="row">
+          <div class="col-lg-6 col-md-6 form-group">
+            <label for="inputClientFantasyNameFilter" class="control-label">Nome Fantasia</label>
+            <input type="text" id="inputClientFantasyNameFilter" [(ngModel)]="liberationFilter.fantasyName"
+                   class="form-control" placeholder="Nome Fantasia" name="fantasyName">
+          </div>
+          <div class="col-lg-6 col-md-6 form-group">
+            <label for="inputClientSocialReasonFilter" class="control-label">Nome</label>
+            <input type="text" id="inputClientSocialReasonFilter" [(ngModel)]="liberationFilter.name"
+                   class="form-control" placeholder="Razão Social" name="socialReason">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6 col-md-6 form-group">
+            <label for="inputClientSituationFilter" class="control-label">Status</label>
+            <select name="situation" id="inputClientSituationFilter" class="form-control"
+                    [(ngModel)]="liberationFilter.situation">
+              <option value=""></option>
+              <option value="ATIVO">Ativo</option>
+              <option value="INATIVO">Inativo</option>
+            </select>
+          </div>
+          <div class="col-lg-6 col-md-6 form-group">
+            <label for="inputClientCategoryFilter" class="control-label">Categoria</label>
+            <select name="category" id="inputClientCategoryFilter" class="form-control"
+                    [(ngModel)]="liberationFilter.category">
+              <option value=""></option>
+              <option value="MENSAL">Mensal</option>
+              <option value="ALUGUEL">Aluguel</option>
+              <option value="CHAMADO">Chamado</option>
+              <option value="GRATUITO">Gratuito</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 form-group">
+        <button type="button" class="btn btn-primary pull-right" (click)="searchClients()">
+          <span class="fa fa-search"></span> Pesquisar
+        </button>
+      </div>
+    </div>
+  </form>
+  <ng2-slim-loading-bar [color]="'#204d74'" [height]="'4px'"></ng2-slim-loading-bar>
+</div>
+
+<div class="row" *ngIf="listClients.length > 0">
+  <div class="col-lg-12 col-md-12">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th class="text-center">Cód.</th>
+          <th class="text-left">Nome Fantasia</th>
+          <th class="text-left">Razão Social</th>
+          <th class="text-center">Categoria</th>
+          <th class="text-center">Versão</th>
+          <th class="text-center">Data de Ver.</th>
+          <th class="text-center">Data de Lib.</th>
+          <th class="text-left">Observações</th>
+          <th class="text-center">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let client of listClients | paginate: {itemsPerPage: 5, currentPage: p }">
+          <td class="text-center">{{client.id}}</td>
+          <td class="text-left">{{client.fantasyName}}</td>
+          <td class="text-left">{{client.name}}</td>
+          <td class="text-center">{{client.category}}</td>
+          <td class="text-center">{{client.liberation.clientSystemVersion}}</td>
+          <td class="text-center">{{getConvertedDate(client.liberation.systemLiberationDate)}}</td>
+          <td class="text-center">{{getConvertedDate(client.liberation.verificationDate)}}</td>
+          <td class="text-left">{{client.liberation.obs}}</td>
+          <td class="text-center">{{client.situation}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="row">
+      <div class="col-lg-10 col-md-10">
+        <pagination-controls previousLabel="Anterior"
+                             nextLabel="Próximo"
+                             (pageChange)="p = $event">
+        </pagination-controls>
+      </div>
+      <div class="col-lg-2 col-md-2">
+        <button class="btn btn-primary pull-right" (click)="export()">
+          <span class="fa fa-download"></span> Exportar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
