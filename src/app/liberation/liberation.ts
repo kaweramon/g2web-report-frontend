@@ -3,8 +3,8 @@ export class Liberation {
   public id: number;
   public clientId: number;
   public clientSystemVersion: string;
-  public systemLiberationDate: Date;
-  public verificationDate: Date;
+  public systemLiberationDate: any;
+  public verificationDate: any;
   public obs: string;
   public client: Client;
 

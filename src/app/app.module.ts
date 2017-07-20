@@ -1,6 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import 'rxjs/add/operator/map';
 
@@ -22,11 +22,17 @@ import {SightSaleService} from './sight-sale/sight-sale.service';
 import { SightSaleDetailsComponent } from './sight-sale/sight-sale-details/sight-sale-details.component';
 import { SaleResumeComponent } from './sale-resume/sale-resume.component';
 import {NgxPaginationModule} from 'ngx-pagination';
-import {routing} from "./app.routes";
+import {routing} from './app.routes';
 import { ReportComponent } from './report/report.component';
 import { LiberationComponent } from './liberation/liberation.component';
-import {LiberationService} from "./liberation/liberation.service";
-import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
+import {LiberationService} from './liberation/liberation.service';
+import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+import { ModalClientLiberationComponent } from './liberation/modal-client-liberation/modal-client-liberation.component';
+import {ModalModule} from 'ngx-bootstrap';
+import {EmployeeService} from './employee/employee.service';
+import {LocalStorageModule} from 'angular-2-local-storage';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ToastModule} from "ng2-toastr";
 
 @NgModule({
   declarations: [
@@ -40,17 +46,26 @@ import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
     SightSaleDetailsComponent,
     SaleResumeComponent,
     ReportComponent,
-    LiberationComponent
+    LiberationComponent,
+    ModalClientLiberationComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
     TabsModule.forRoot(),
     TextMaskModule,
     NgxPaginationModule,
     routing,
-    SlimLoadingBarModule.forRoot()
+    SlimLoadingBarModule.forRoot(),
+    ModalModule.forRoot(),
+    LocalStorageModule.withConfig({
+      prefix: 'my-app',
+      storageType: 'localStorage'
+    }),
+    ToastModule.forRoot()
   ],
   providers: [
     QuickSellService,
@@ -59,7 +74,8 @@ import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
     ProductGroupService,
     ProductFamilyService,
     SightSaleService,
-    LiberationService
+    LiberationService,
+    EmployeeService
   ],
   bootstrap: [AppComponent]
 })

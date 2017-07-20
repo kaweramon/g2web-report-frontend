@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {LiberationService} from './liberation.service';
 import {Liberation} from './liberation';
 import * as moment from 'moment';
@@ -7,6 +7,11 @@ import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
 import {Angular2Csv} from 'angular2-csv/Angular2-csv';
 import {ClientService} from '../client/client.service';
 import {Client} from '../client/client';
+import {ModalDirective} from 'ngx-bootstrap';
+import {Employee} from '../employee/employee';
+import {EmployeeService} from '../employee/employee.service';
+import {LocalStorageService} from 'angular-2-local-storage';
+import {ToastsManager} from 'ng2-toastr';
 
 @Component({
   selector: 'app-liberation',
@@ -21,24 +26,30 @@ export class LiberationComponent {
 
   public liberationFilter: LiberationFilters;
 
-  constructor(private service: LiberationService, private clientService: ClientService,
-              private slimLoadingBarService: SlimLoadingBarService) {
-    this.liberationFilter = new LiberationFilters();
-  }
+  public selectClient: Client;
 
-  public getListLiberations(): void {
-    this.slimLoadingBarService.start();
-    this.service.listLiberation().subscribe(result => {
-      this.listLiberation = result;
-      this.slimLoadingBarService.stop();
-      this.slimLoadingBarService.complete();
-    });
+  public employee: Employee;
+
+  public isLooged = false;
+
+  @ViewChild('modalReleaseClient')
+  public modalReleaseClient: ModalDirective;
+
+  constructor(private service: LiberationService, private clientService: ClientService,
+              private slimLoadingBarService: SlimLoadingBarService, private employeeService: EmployeeService,
+              private localStorageService: LocalStorageService, private toastr: ToastsManager) {
+    this.liberationFilter = new LiberationFilters();
+    this.employee = new Employee();
+    if (this.localStorageService.get('employee') !== null && this.localStorageService.get('employee') !== undefined) {
+      this.isLooged = true;
+    } else {
+      this.isLooged = false;
+    }
   }
 
   public searchClients(): void {
     this.slimLoadingBarService.start();
     this.clientService.searchClients(this.buildQuery()).subscribe(result => {
-      console.log(result);
       this.listClients = result;
       this.slimLoadingBarService.stop();
       this.slimLoadingBarService.complete();
@@ -73,12 +84,18 @@ export class LiberationComponent {
       }
       query += 'situation=' + this.liberationFilter.situation;
     }
-    console.log(query);
     return query;
   }
 
-  public getConvertedDate(date: Date): any {
-    return moment(date).format('DD/MM/YYYY');
+  public getConvertedDate(clientId, date: Date): any {
+    if (this.selectClient !== undefined && clientId === this.selectClient.id) {
+      return moment(date).format('DD/MM/YYYY');;
+    }
+    if (date === null) {
+      return '';
+    } else {
+      return moment(date).add(1, 'days').format('DD/MM/YYYY');
+    }
   }
 
   public export(): void {
@@ -88,14 +105,40 @@ export class LiberationComponent {
         nome: liberation.id,
         razaoSocial: liberation.client !== null ? liberation.client.name : '',
         nomeFantasia: liberation.client !== null ? liberation.client.fantasyName : '',
-        versaoDoCliente: liberation.clientSystemVersion,
-        dataDeLiberacao: liberation.systemLiberationDate,
+        versaoDoCliente: liberation !== null ? liberation.clientSystemVersion : '',
+        dataDeLiberacao: liberation !== null ? liberation.systemLiberationDate : '',
         dataDeVerificacao: moment(liberation.verificationDate, 'DD/MM/YYYY'),
         obs: liberation.obs,
         status: liberation.client !== null ? liberation.client.situation : ''
       });
     });
     new Angular2Csv(test, 'relatorio_liberacao_cliente_' + moment().format('DD/MM/YYYY'), {showLabels: true});
+  }
+
+  public showModalReleaseClient(client: Client): void {
+    this.selectClient = Object.assign({}, client);
+    this.modalReleaseClient.show();
+  }
+
+  public onNotify(msg: any): void {
+    if (msg.message === 'CLIENT_RELEASED') {
+      this.selectClient.liberation.systemLiberationDate = moment().add(5, 'days');
+      this.selectClient.liberation.verificationDate = moment().add(5, 'days');
+    }
+  }
+
+  public login(): void {
+    this.employeeService.login(this.employee.login, this.employee.password).subscribe(employee => {
+      this.localStorageService.set('employee', employee);
+      this.isLooged = true;
+    }, error => {
+      this.toastr.error(error.json().message, 'Erro');
+    });
+  }
+
+  public loggof(): void {
+    this.isLooged = false;
+    this.localStorageService.set('employee', null );
   }
 
 }

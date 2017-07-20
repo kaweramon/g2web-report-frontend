@@ -1,4 +1,27 @@
-<div class="col-lg-12 col-md-12">
+<div class="col-lg-12 col-md-12" *ngIf="!isLooged">
+  <form name="formLogin" class="form">
+    <div class="row">
+      <div class="col-lg-4 col-md-4 form-group">
+        <label for="inputEmployeeLogin" class="control-label">Login</label>
+        <input type="text" name="login" id="inputEmployeeLogin" class="form-control" [(ngModel)]="employee.login">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 col-md-4 form-group">
+        <label for="inputEmployeePassword" class="control-label">Senha</label>
+        <input type="password" (keyup.enter)="login()" name="password" id="inputEmployeePassword" class="form-control" [(ngModel)]="employee.password">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 col-md-4 form-group">
+        <button type="button" class="btn btn-default">Limpar</button>
+        <button type="button" class="btn btn-primary" (click)="login()">Login</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="col-lg-12 col-md-12" *ngIf="isLooged">
   <form name="formFilterQuickSellReport" class="form">
     <div class="row">
       <div class="col-lg-8 col-md-8" style="background-color: #FFFFAB;">
@@ -37,9 +60,12 @@
           </div>
         </div>
       </div>
+      <div class="col-lg-4 col-md-4 form-group">
+        <button (click)="loggof()" class="btn btn-default pull-right"><span class="fa fa-sign-out"></span>Sair</button>
+      </div>
     </div>
     <div class="row">
-      <div class="col-lg-12 col-md-12 form-group">
+      <div class="col-lg-12 col-md-12">
         <button type="button" class="btn btn-primary pull-right" (click)="searchClients()">
           <span class="fa fa-search"></span> Pesquisar
         </button>
@@ -49,8 +75,8 @@
   <ng2-slim-loading-bar [color]="'#204d74'" [height]="'4px'"></ng2-slim-loading-bar>
 </div>
 
-<div class="row" *ngIf="listClients.length > 0">
-  <div class="col-lg-12 col-md-12">
+<div class="row" *ngIf="isLooged">
+  <div class="col-lg-12 col-md-12" *ngIf="listClients.length > 0">
     <table class="table table-bordered table-striped">
       <thead>
         <tr>
@@ -63,6 +89,7 @@
           <th class="text-center">Data de Lib.</th>
           <th class="text-left">Observações</th>
           <th class="text-center">Status</th>
+          <th class="text-center">Liberar</th>
         </tr>
       </thead>
       <tbody>
@@ -71,11 +98,15 @@
           <td class="text-left">{{client.fantasyName}}</td>
           <td class="text-left">{{client.name}}</td>
           <td class="text-center">{{client.category}}</td>
-          <td class="text-center">{{client.liberation.clientSystemVersion}}</td>
-          <td class="text-center">{{getConvertedDate(client.liberation.systemLiberationDate)}}</td>
-          <td class="text-center">{{getConvertedDate(client.liberation.verificationDate)}}</td>
-          <td class="text-left">{{client.liberation.obs}}</td>
+          <td class="text-center">{{client.liberation?.clientSystemVersion}}</td>
+          <td class="text-center">{{getConvertedDate(client.id, client.liberation?.verificationDate)}}</td>
+          <td class="text-center">{{getConvertedDate(client.id, client.liberation?.systemLiberationDate)}}</td>
+          <td class="text-left">{{client.liberation?.obs}}</td>
           <td class="text-center">{{client.situation}}</td>
+          <td class="text-center">
+            <span class="fa fa-check" *ngIf="client.liberation?.systemLiberationDate !== client.liberation?.verificationDate"
+                  (click)="showModalReleaseClient(client)"></span>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -93,4 +124,11 @@
       </div>
     </div>
   </div>
+</div>
+
+<div bsModal #modalReleaseClient="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <app-modal-client-liberation [client]="selectClient"  [modal]="modalReleaseClient" (notify)="onNotify($event)">
+
+  </app-modal-client-liberation>
 </div>
