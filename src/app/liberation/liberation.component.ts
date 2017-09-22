@@ -11,7 +11,6 @@ import {ModalDirective} from 'ngx-bootstrap';
 import {Employee} from '../employee/employee';
 import {EmployeeService} from '../employee/employee.service';
 import {LocalStorageService} from 'angular-2-local-storage';
-import {ToastsManager} from 'ng2-toastr';
 
 @Component({
   selector: 'app-liberation',
@@ -19,8 +18,6 @@ import {ToastsManager} from 'ng2-toastr';
   styleUrls: ['./liberation.component.css']
 })
 export class LiberationComponent {
-
-  public listLiberation: Array<Liberation> = [];
 
   public listClients: Array<Client> = [];
 
@@ -32,12 +29,14 @@ export class LiberationComponent {
 
   public isLooged = false;
 
+  public listVersions: string[];
+
   @ViewChild('modalReleaseClient')
   public modalReleaseClient: ModalDirective;
 
   constructor(private service: LiberationService, private clientService: ClientService,
               private slimLoadingBarService: SlimLoadingBarService, private employeeService: EmployeeService,
-              private localStorageService: LocalStorageService, private toastr: ToastsManager) {
+              private localStorageService: LocalStorageService) {
     this.liberationFilter = new LiberationFilters();
     this.employee = new Employee();
     if (this.localStorageService.get('employee') !== null && this.localStorageService.get('employee') !== undefined) {
@@ -45,6 +44,13 @@ export class LiberationComponent {
     } else {
       this.isLooged = false;
     }
+    this.getVersions();
+  }
+
+  private getVersions(): void {
+    this.service.getVersions().subscribe(versions => {
+      this.listVersions = versions;
+    });
   }
 
   public searchClients(): void {
@@ -84,12 +90,19 @@ export class LiberationComponent {
       }
       query += 'situation=' + this.liberationFilter.situation;
     }
+    if (this.liberationFilter.version !== null && this.liberationFilter.version !== undefined
+      && this.liberationFilter.version.length > 0) {
+      if (query.length > 0) {
+        query += ',';
+      }
+      query += 'clientSystemVersion=' + this.liberationFilter.version;
+    }
     return query;
   }
 
   public getConvertedDate(clientId, date: Date): any {
     if (this.selectClient !== undefined && clientId === this.selectClient.id) {
-      return moment(date).format('DD/MM/YYYY');;
+      return moment(date).format('DD/MM/YYYY');
     }
     if (date === null) {
       return '';
@@ -100,16 +113,17 @@ export class LiberationComponent {
 
   public export(): void {
     const test: Array<any> = [];
-    this.listLiberation.forEach(liberation => {
+    this.listClients.forEach(client => {
       test.push({
-        nome: liberation.id,
-        razaoSocial: liberation.client !== null ? liberation.client.name : '',
-        nomeFantasia: liberation.client !== null ? liberation.client.fantasyName : '',
-        versaoDoCliente: liberation !== null ? liberation.clientSystemVersion : '',
-        dataDeLiberacao: liberation !== null ? liberation.systemLiberationDate : '',
-        dataDeVerificacao: moment(liberation.verificationDate, 'DD/MM/YYYY'),
-        obs: liberation.obs,
-        status: liberation.client !== null ? liberation.client.situation : ''
+        codigo: client.id,
+        nome: client.name,
+        nomeFantasia: client.fantasyName,
+        categoria: client.category,
+        versao: client.liberation !== null ? client.liberation.clientSystemVersion : '',
+        dataVerificacao: client.liberation !== null ? this.getConvertedDate(client.id, client.liberation.verificationDate) : '',
+        dataLiberacao: client.liberation !== null ? this.getConvertedDate(client.id, client.liberation.systemLiberationDate) : '',
+        observacoes: client.liberation !== null ? client.liberation.obs : '',
+        status: client.situation
       });
     });
     new Angular2Csv(test, 'relatorio_liberacao_cliente_' + moment().format('DD/MM/YYYY'), {showLabels: true});
@@ -132,7 +146,6 @@ export class LiberationComponent {
       this.localStorageService.set('employee', employee);
       this.isLooged = true;
     }, error => {
-      this.toastr.error(error.json().message, 'Erro');
     });
   }
 

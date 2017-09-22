@@ -3,6 +3,7 @@ import {QuickSellService} from './quick-sell-service';
 import {QuickSell} from './quick-sell';
 import * as moment from 'moment';
 import {SaleResume} from '../sale-resume/sale-resume';
+import {ToastOptions, ToastyConfig, ToastyService} from 'ng2-toasty';
 declare var $: any;
 
 @Component({
@@ -18,14 +19,26 @@ export class QuickSellComponent {
 
   public saleResume: SaleResume;
 
-  public reportType: string = 'quickSell';
+  public reportType: any = 'quickSell';
 
-  constructor(private quickSellService: QuickSellService) {}
+  constructor(private quickSellService: QuickSellService, private toastyService: ToastyService, private toastyConfig: ToastyConfig) {
+    this.toastyConfig.position = 'bottom-right';
+  }
 
   public searchQuickSellReport(query: string): void {
+    this.quickSellSelected = new QuickSell();
     this.listQuickSell = [];
     this.quickSellService.list(query)
       .subscribe( result => {
+        if (result.length === 0) {
+          const toastOptions: ToastOptions = {
+            title: 'Nenhum resultado encontrado',
+            showClose: true,
+            timeout: 4000,
+            theme: 'material'
+          };
+          this.toastyService.warning(toastOptions);
+        }
         this.listQuickSell = result;
         this.calculateTotals();
     });
@@ -37,7 +50,7 @@ export class QuickSellComponent {
 
   public selectRow(event, quickSell, quickSellId): void {
     event.preventDefault();
-    this.quickSellSelected = quickSell;
+    this.quickSellSelected = Object.assign({}, this.quickSellSelected, quickSell);
     $('#quickSellRow_' + quickSellId).addClass('active').siblings().removeClass('active');
   }
 

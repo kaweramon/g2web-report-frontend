@@ -22,4 +22,8 @@ export class LiberationService {
       {headers : this.headers, search : this.params}).map(res => res.json());
   }
 
+  public getVersions(): Observable<string[]> {
+    return this.http.get(this.urlLiberationReport + '/versions', {headers: this.headers}).map(res => res.json());
+  }
+
 }

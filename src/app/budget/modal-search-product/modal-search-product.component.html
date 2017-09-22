@@ -1,0 +1,61 @@
+<div class="modal-dialog modal-md">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Procurar Produto</h4>
+      <button type="button" class="close pull-right" (click)="modal.hide();" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-lg-7 col-md-7">
+          <label for="inputClientName" class="control-label">Nome / Referência</label>
+          <input type="text" class="form-control" name="clientNameFantasy" id="inputClientName" placeholder="Nome ou Fantasia"
+                 [(ngModel)]="productNameReference" (keyup.enter)="searchProduct()">
+        </div>
+        <div class="col-lg-2 col-md-2">
+          <label for="inputId" class="control-label">Código</label>
+          <input type="number" class="form-control" id="inputId" name="clientId" [(ngModel)]="productId" placeholder="Código"
+                 (keyup.enter)="searchProduct()">
+        </div>
+        <div class="col-lg-3 col-md-3">
+          <button class="btn btn-primary pull-right" (click)="searchProduct()" style="margin-top: 25px;">
+            <span class="fa fa-search"></span>
+            Pesquisar
+          </button>
+        </div>
+      </div>
+      <div class="row" *ngIf="listProducts !== undefined && listProducts.length > 0">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Cód.</th>
+              <th>Discriminação</th>
+              <th>Referência</th>
+              <th>Cód/Barra</th>
+              <th>Valor</th>
+              <th>NCM</th>
+              <th>CFOP</th>
+              <th>CST</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of listProducts" (click)="selectProduct(product)">
+              <td>{{product.id}}</td>
+              <td>{{product.name}}</td>
+              <td>{{product.reference}}</td>
+              <td>{{product.barCode}}</td>
+              <td>{{product.priceValue}}</td>
+              <td>{{product.productOther.ncm}}</td>
+              <td>{{product.productOther.cfop}}</td>
+              <td>{{product.productOther.cstNumber}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" (click)="modal.hide();">Fechar</button>
+    </div>
+  </div>
+</div>

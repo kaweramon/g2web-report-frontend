@@ -6,11 +6,13 @@
           <div class="col-lg-3 col-md-3 form-group">
             <label for="inputQuickSellReportDateFrom" class="label-control">De:</label>
             <input type="text" [textMask]="{mask: dateMask}" class="form-control" id="inputQuickSellReportDateFrom"
+                   (keyup.enter)="buildSearchQuery()"
                    name="dateFrom" [(ngModel)]="reportFilters.dateFrom" placeholder="dd/mm/aaaa">
           </div>
           <div class="col-lg-3 col-md-3 form-group">
             <label for="inputQuickSellReportDateTo" class="label-control">Até:</label>
             <input type="text" [textMask]="{mask: dateMask}" class="form-control" id="inputQuickSellReportDateTo"
+                   (keyup.enter)="buildSearchQuery()"
                    name="dateTo" [(ngModel)]="reportFilters.dateTo" placeholder="dd/mm/aaaa">
           </div>
           <div class="col-lg-6 col-md-6 form-group">
@@ -31,12 +33,12 @@
           <div class="col-lg-3 col-md-3 form-group">
             <label for="inputQuickSellReportFromSchedule" class="label-control">Hr/Início:</label>
             <input type="text" [textMask]="{mask: hourMask}" class="form-control" name="fromSchedule" id="inputQuickSellReportFromSchedule"
-                   [(ngModel)]="reportFilters.fromSchedule">
+                   [(ngModel)]="reportFilters.fromSchedule" (keyup.enter)="buildSearchQuery()">
           </div>
           <div class="col-lg-3 col-md-3 form-group">
             <label for="inputQuickSellReportToSchedule" class="label-control">Hr/Final:</label>
             <input type="text" [textMask]="{mask: hourMask}" class="form-control" name="toScedule" id="inputQuickSellReportToSchedule"
-                   [(ngModel)]="reportFilters.toSchedule">
+                   [(ngModel)]="reportFilters.toSchedule" (keyup.enter)="buildSearchQuery()">
           </div>
           <div class="col-lg-6 col-md-6 form-group" *ngIf="filterSelected === 'client'">
             <label for="inputQuickSellReportClient" class="label-control">Cliente:</label>

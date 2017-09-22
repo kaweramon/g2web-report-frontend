@@ -9,6 +9,7 @@ export class SightSale {
   public cashier: number;
   public salesMan: string;
   public schedule: Date;
+  public nfeKey: string;
   public coo: string;
   public listProductSightSale: Array<ProductSightSale>;
 }

@@ -4,4 +4,5 @@ export class LiberationFilters {
   public name: string;
   public category: string;
   public situation: string;
+  public version: string;
 }

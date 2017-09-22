@@ -1,77 +1,80 @@
 <div class="col-lg-12 col-md-12" *ngIf="!isLooged">
-  <form name="formLogin" class="form">
-    <div class="row">
-      <div class="col-lg-4 col-md-4 form-group">
-        <label for="inputEmployeeLogin" class="control-label">Login</label>
-        <input type="text" name="login" id="inputEmployeeLogin" class="form-control" [(ngModel)]="employee.login">
-      </div>
+  <div class="row">
+    <div class="col-lg-4 col-md-4 form-group">
+      <label for="inputEmployeeLogin" class="control-label">Login</label>
+      <input type="text" name="login" id="inputEmployeeLogin" class="form-control" [(ngModel)]="employee.login">
     </div>
-    <div class="row">
-      <div class="col-lg-4 col-md-4 form-group">
-        <label for="inputEmployeePassword" class="control-label">Senha</label>
-        <input type="password" (keyup.enter)="login()" name="password" id="inputEmployeePassword" class="form-control" [(ngModel)]="employee.password">
-      </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4 col-md-4 form-group">
+      <label for="inputEmployeePassword" class="control-label">Senha</label>
+      <input type="password" (keyup.enter)="login()" name="password" id="inputEmployeePassword" class="form-control" [(ngModel)]="employee.password">
     </div>
-    <div class="row">
-      <div class="col-lg-4 col-md-4 form-group">
-        <button type="button" class="btn btn-default">Limpar</button>
-        <button type="button" class="btn btn-primary" (click)="login()">Login</button>
-      </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4 col-md-4 form-group">
+      <button type="button" class="btn btn-default">Limpar</button>
+      <button type="button" class="btn btn-primary" (click)="login()">Login</button>
     </div>
-  </form>
+  </div>
 </div>
 
 <div class="col-lg-12 col-md-12" *ngIf="isLooged">
-  <form name="formFilterQuickSellReport" class="form">
-    <div class="row">
-      <div class="col-lg-8 col-md-8" style="background-color: #FFFFAB;">
-        <div class="row">
-          <div class="col-lg-6 col-md-6 form-group">
-            <label for="inputClientFantasyNameFilter" class="control-label">Nome Fantasia</label>
-            <input type="text" id="inputClientFantasyNameFilter" [(ngModel)]="liberationFilter.fantasyName"
-                   class="form-control" placeholder="Nome Fantasia" name="fantasyName">
-          </div>
-          <div class="col-lg-6 col-md-6 form-group">
-            <label for="inputClientSocialReasonFilter" class="control-label">Nome</label>
-            <input type="text" id="inputClientSocialReasonFilter" [(ngModel)]="liberationFilter.name"
-                   class="form-control" placeholder="Razão Social" name="socialReason">
-          </div>
+  <div class="row">
+    <div class="col-lg-8 col-md-8" style="background-color: #FFFFAB;">
+      <div class="row">
+        <div class="col-lg-6 col-md-6 form-group">
+          <label for="inputClientFantasyNameFilter" class="control-label">Nome Fantasia</label>
+          <input type="text" id="inputClientFantasyNameFilter" [(ngModel)]="liberationFilter.fantasyName"
+                 class="form-control" placeholder="Nome Fantasia" name="fantasyName" (keyup.enter)="searchClients()">
         </div>
-        <div class="row">
-          <div class="col-lg-6 col-md-6 form-group">
-            <label for="inputClientSituationFilter" class="control-label">Status</label>
-            <select name="situation" id="inputClientSituationFilter" class="form-control"
-                    [(ngModel)]="liberationFilter.situation">
-              <option value=""></option>
-              <option value="ATIVO">Ativo</option>
-              <option value="INATIVO">Inativo</option>
-            </select>
-          </div>
-          <div class="col-lg-6 col-md-6 form-group">
-            <label for="inputClientCategoryFilter" class="control-label">Categoria</label>
-            <select name="category" id="inputClientCategoryFilter" class="form-control"
-                    [(ngModel)]="liberationFilter.category">
-              <option value=""></option>
-              <option value="MENSAL">Mensal</option>
-              <option value="ALUGUEL">Aluguel</option>
-              <option value="CHAMADO">Chamado</option>
-              <option value="GRATUITO">Gratuito</option>
-            </select>
-          </div>
+        <div class="col-lg-6 col-md-6 form-group">
+          <label for="inputClientSocialReasonFilter" class="control-label">Nome</label>
+          <input type="text" id="inputClientSocialReasonFilter" [(ngModel)]="liberationFilter.name"
+                 class="form-control" placeholder="Razão Social" name="socialReason" (keyup.enter)="searchClients()">
         </div>
       </div>
-      <div class="col-lg-4 col-md-4 form-group">
-        <button (click)="loggof()" class="btn btn-default pull-right"><span class="fa fa-sign-out"></span>Sair</button>
+      <div class="row">
+        <div class="col-lg-6 col-md-6 form-group">
+          <label for="inputClientSituationFilter" class="control-label">Status</label>
+          <select name="situation" id="inputClientSituationFilter" class="form-control"
+                  [(ngModel)]="liberationFilter.situation">
+            <option value=""></option>
+            <option value="ATIVO">Ativo</option>
+            <option value="INATIVO">Inativo</option>
+          </select>
+        </div>
+        <div class="col-lg-6 col-md-6 form-group">
+          <label for="inputClientCategoryFilter" class="control-label">Categoria</label>
+          <select name="category" id="inputClientCategoryFilter" class="form-control"
+                  [(ngModel)]="liberationFilter.category">
+            <option value=""></option>
+            <option value="MENSAL">Mensal</option>
+            <option value="ALUGUEL">Aluguel</option>
+            <option value="CHAMADO">Chamado</option>
+            <option value="GRATUITO">Gratuito</option>
+          </select>
+        </div>
+        <!--<div class="col-lg-4 col-md-4 form-group">
+          <label for="inputClientVersionFilter" class="control-label">Versão</label>
+          <select name="version" id="inputClientVersionFilter" class="form-control"
+                  [(ngModel)]="liberationFilter.version">
+            <option *ngFor="let version of listVersions" [ngValue]="version">{{version}}</option>
+          </select>
+        </div>-->
       </div>
     </div>
-    <div class="row">
-      <div class="col-lg-12 col-md-12">
-        <button type="button" class="btn btn-primary pull-right" (click)="searchClients()">
-          <span class="fa fa-search"></span> Pesquisar
-        </button>
-      </div>
+    <div class="col-lg-4 col-md-4 form-group">
+      <button (click)="loggof()" class="btn btn-default pull-right"><span class="fa fa-sign-out"></span>Sair</button>
     </div>
-  </form>
+  </div>
+  <div class="row">
+    <div class="col-lg-12 col-md-12">
+      <button type="button" class="btn btn-primary pull-right" (click)="searchClients()">
+        <span class="fa fa-search"></span> Pesquisar
+      </button>
+    </div>
+  </div>
   <ng2-slim-loading-bar [color]="'#204d74'" [height]="'4px'"></ng2-slim-loading-bar>
 </div>
 

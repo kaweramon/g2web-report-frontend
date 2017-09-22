@@ -6,6 +6,7 @@
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
+              <th class="text-center"></th>
               <th class="text-center">Cód.</th>
               <th class="text-center">COO</th>
               <th class="text-center">Data/Hora</th>
@@ -18,15 +19,21 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let sightSale of listSightSale | paginate: { itemsPerPage: 5, currentPage: p }" id="sightSaleRow_{{sightSale.id}}"
-                (click)="selectRow($event, sightSale, sightSale.id)">
+            <tr *ngFor="let sightSale of listSightSale | paginate: { itemsPerPage: 5, currentPage: p }" id="sightSaleRow_{{sightSale.id}}">
+              <td class="text-center">
+                <div class="radio">
+                  <label><input type="radio" name="radioSelectSightSale"
+                                [checked]="sightSaleSelected.id === sightSale.id"
+                                (change)="selectRow($event, sightSale, sightSale.id)"></label>
+                </div>
+              </td>
               <td class="text-center">{{sightSale.id}}</td>
               <td class="text-center">{{sightSale.coo}}</td>
               <td class="text-center">
                 {{getConvertedDate(sightSale.sellDate, 'DD/MM/YYYY')}} &nbsp; {{sightSale.schedule}}
               </td>
               <td class="text-center">{{sightSale.type}}</td>
-              <td class="text-left">{{sightSale.client.name}}</td>
+              <td class="text-left">{{sightSale.client?.name}}</td>
               <td class="text-center">{{sightSale.cashier}}</td>
               <td class="text-left">{{sightSale.nfeKey}}</td>
               <td class="text-center">{{sightSale.totalDiscount}}</td>

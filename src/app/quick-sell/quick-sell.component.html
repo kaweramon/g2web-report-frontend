@@ -1,4 +1,5 @@
 <app-report-filters [reportType]="reportType" (notify)="onNotify($event)"></app-report-filters>
+<ng2-toasty></ng2-toasty>
 <div class="row" *ngIf="listQuickSell.length > 0">
   <div class="col-lg-12 col-md-12">
     <tabset>
@@ -6,6 +7,7 @@
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
+              <th class="text-center"></th>
               <th class="text-center">Cód.</th>
               <th class="text-center">Data/Hora</th>
               <th class="text-center">Tipo</th>
@@ -18,8 +20,15 @@
           </thead>
           <tbody>
           <tr *ngFor="let quickSell of listQuickSell | paginate: { itemsPerPage: 5, currentPage: p }"
-              id="quickSellRow_{{quickSell.id}}"
-              (click)="selectRow($event, quickSell, quickSell.id)">
+              id="quickSellRow_{{quickSell.id}}">
+            <td>
+              <div class="radio">
+                <label><input type="radio" name="radioSelectQuickSell"
+                              [checked]="quickSellSelected.id === quickSell.id"
+                              (change)="selectRow($event, quickSell, quickSell.id)">
+                </label>
+              </div>
+            </td>
             <td class="text-center">{{quickSell.id}}</td>
             <td>{{getConvertedDate(quickSell.sellDate)}} &nbsp; {{quickSell.schedule}}</td>
             <td class="text-center">{{quickSell.type}}</td>

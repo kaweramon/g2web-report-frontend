@@ -13,8 +13,8 @@
       </thead>
       <tbody>
       <tr *ngFor="let productSightSale of sightSale.listProductSightSale">
-        <td>{{productSightSale.product.barCode}}</td>
-        <td>{{productSightSale.product.name}}</td>
+        <td>{{productSightSale.product?.barCode}}</td>
+        <td *ngIf="productSightSale.product !== null">{{productSightSale.product?.name}}</td>
         <td class="text-center">{{productSightSale.cfop}}</td>
         <td class="text-center">{{productSightSale.quantity}}</td>
         <td class="text-center">{{productSightSale.value}}</td>

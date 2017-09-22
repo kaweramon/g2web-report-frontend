@@ -18,8 +18,11 @@ export class SightSaleComponent {
 
   public saleResume: SaleResume;
 
+  public selectedSightSale: boolean;
+
   constructor(private sightSaleService: SightSaleService) {
     this.listSightSale = new Array<SightSale>();
+    this.sightSaleSelected = new SightSale();
   }
 
   private searchSightSaleReport(query: string): void {
@@ -35,7 +38,7 @@ export class SightSaleComponent {
 
   public selectRow(event, sightSale, sightSaleId): void {
     event.preventDefault();
-    this.sightSaleSelected = sightSale;
+    this.sightSaleSelected = Object.assign({}, this.sightSaleSelected, sightSale);
     $('#sightSaleRow_' + sightSaleId).addClass('active').siblings().removeClass('active');
   }
 

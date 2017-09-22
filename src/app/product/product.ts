@@ -7,6 +7,10 @@ export class Product {
   public barCode: string;
   public type: string;
   public costPrice: number;
+  public priceValue: number;
+  public reference: string;
+  public unity: string;
+  public quantity: number;
   public productOther: ProductOthers;
   public productGroup: ProductGroup;
   public productFamily: ProductFamily;

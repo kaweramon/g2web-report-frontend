@@ -1,0 +1,241 @@
+<div class="col-lg-12 col-md-12" *ngIf="!isLoged">
+  <div class="row">
+    <div class="col-lg-4 col-md-4 form-group">
+      <label for="inputEmployeeLogin" class="control-label">Login</label>
+      <input type="text" name="login" id="inputEmployeeLogin" class="form-control" [(ngModel)]="employee.login">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4 col-md-4 form-group">
+      <label for="inputEmployeePassword" class="control-label">Senha</label>
+      <input type="password" (keyup.enter)="login()" name="password" id="inputEmployeePassword" class="form-control" [(ngModel)]="employee.password">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4 col-md-4 form-group">
+      <button type="button" class="btn btn-default" (click)="resetEmployee()">Limpar</button>
+      <button type="button" class="btn btn-primary" [disabled]="(employee.login === undefined || employee.login.length === 0)
+      || (employee.password === undefined || employee.password.length === 0)"
+              (click)="login()">Login</button>
+    </div>
+  </div>
+
+</div>
+<div class="container" *ngIf="isLoged">
+  <div class="row">
+    <div class="col-lg-12 col-md-12 text-center">
+      <h2>Orçamento / Pedido</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+      <button class="btn btn-primary" (click)="addBudget()" [disabled]="budget !== undefined">
+        <span class="fa fa-plus"></span>&nbsp;Adicionar
+      </button>
+      <button class="btn btn-default" (click)="resetBuget()" [disabled]="budget === undefined">
+        <span class="fa fa-times-circle"></span>&nbsp;Cancelar
+      </button>
+      <button class="btn btn-default" type="button"
+              (click)="saveBuget()"
+              [disabled]="budget === undefined || listProducts.length === 0 || client.id === undefined">
+        <span class="fa fa-check"></span>&nbsp;Salvar
+      </button>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+      <button class="btn btn-primary" (click)="modalSearchClient.show()">
+        <span class="fa fa-plus"></span>&nbsp;Cliente
+      </button>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+      <button class="btn btn-primary" (click)="logOut()"><span class="fa fa-sign-out"></span>&nbsp;Sair</button>
+    </div>
+  </div>
+  <div class="row" style="margin-top: 15px;">
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3><span class="fa fa-cog"></span>&nbsp;Geral</h3>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-lg-12 col-md-12">
+              Operador: {{employee?.id}} - {{employee?.name}}
+            </div>
+          </div>
+          <div class="row" *ngIf="budget">
+            <div class="col-lg-12 col-md-12">
+              Número do Orçamento: {{budget?.budgetCounter + 1}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12 col-md-12">
+              Vendedor: {{employee?.id}} - {{employee?.name}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6" *ngIf="client">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3><span class="fa fa-user"></span> Cliente</h3>
+        </div>
+        <div class="panel-body">
+          <div class="row" *ngIf="client.id && client.name">
+            <div class="col-lg-12 col-md-12">
+              {{client?.id}} - {{client?.name}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12 col-md-12" *ngIf="client.cnpj !== null && client.cnpj !== undefined && client.cnpj.length > 0">
+              CNPJ: {{client?.cnpj}}
+            </div>
+            <div class="col-lg-12 col-md-12" *ngIf="client.cpf !== null && client.cpf !== undefined && client.cpf.length > 0">
+              CPF: {{client?.cpf}}
+            </div>
+          </div>
+          <div class="row" *ngIf="client.uf">
+            <div class="col-lg-12 col-md-12">
+              UF: {{client?.uf}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="budget">
+    <div class="col-lg-3 col-md-3 form-group">
+      <label for="inputBudgetSaleDate" class="label-control">Data:</label>
+      <input type="text" [textMask]="{mask: dateMask}" class="form-control" id="inputBudgetSaleDate"
+             name="dateFrom" [(ngModel)]="saleDateStr" placeholder="dd/mm/aaaa">
+    </div>
+    <div class="col-lg-5 col-md-5 form-group">
+      <label for="inputBudgetObs" class="label-control">Observações</label>
+      <textarea name="obs" [(ngModel)]="budget.obs" id="inputBudgetObs"
+                cols="30" rows="5" class="form-control">
+      </textarea>
+    </div>
+  </div>
+  <div class="row" style="display: flex; align-items: center">
+    <div class="col-lg-4 col-md-4">
+      <h3><span class="fa fa-shopping-cart"></span>&nbsp;Produtos</h3>
+    </div>
+    <div class="col-lg-4 col-md-4">
+      <button class="btn btn-primary pull-left" (click)="modalSearchProduct.show()">
+        <span class="fa fa-search"></span>&nbsp;Pesquisar
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4 col-md-4 form-group">
+      <div class="row">
+        <div class="col-lg-12 col-md-12">
+          <label for="inputProductName" class="label-control">Nome:</label>
+          <input type="text" id="inputProductName" class="form-control" [(ngModel)]="product.name" name="name">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 col-md-4 form-group">
+          <label for="inputProductQuantity" class="label-control">Quant.</label>
+          <input type="number" id="inputProductQuantity" class="form-control" [(ngModel)]="product.quantity" name="barCode">
+        </div>
+        <div class="col-lg-4 col-md-4 form-group">
+          <label for="inputProductPriceValue" class="label-control">Preço</label>
+          <input type="number" id="inputProductPriceValue" class="form-control" [(ngModel)]="product.priceValue"
+                 name="priceValue">
+        </div>
+        <div class="col-lg-4 col-md-4 form-group">
+          <label for="inputProductCFOP" class="label-control">CFOP</label>
+          <input type="number" id="inputProductCFOP" class="form-control" [(ngModel)]="product.productOther.cfop"
+                 name="cfop">
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-4 form-group">
+      <div class="row">
+        <div class="col-lg-12 col-md-12">
+          <label for="inputProductBarCode" class="label-control">Cód/Barra:</label>
+          <input type="text" id="inputProductBarCode" class="form-control" [(ngModel)]="product.barCode" name="barCode">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 col-md-4 form-group">
+          <label for="inputProductCstNumber" class="label-control">CST</label>
+          <input type="number" id="inputProductCstNumber" class="form-control" [(ngModel)]="product.productOther.cstNumber"
+                 name="cstNumber">
+        </div>
+        <div class="col-lg-4 col-md-4 form-group">
+          <label for="inputProductUnity" class="label-control">Uni.</label>
+          <input type="number" id="inputProductUnity" class="form-control" [(ngModel)]="product.unity"
+                 name="unity">
+        </div>
+        <div class="col-lg-4 col-md-4 form-group">
+          <button class="btn btn-primary pull-right" (click)="addProduct()" style="margin-top: 25px;">
+            <span class="fa fa-plus"></span>&nbsp;Adicionar
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-4 form-group">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Total / Produtos<br>
+          <p class="text-center">{{totalProducts | number : '1.2-2'}}</p>
+        </div>
+        <div class="panel-body">
+          Desconto<br>
+          <p class="text-center">{{discount | number : '1.2-2'}}</p>
+          Total<br>
+          <p class="text-center">{{(totalProducts - discount) | number : '1.2-2'}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="listProducts !== undefined && listProducts.length > 0">
+    <div class="col-lg-12 col-md-12">
+      <table class="table table-striped">
+        <thead class="table table-striped">
+          <tr>
+            <th class="text-center">Cód.</th>
+            <th>Discriminação</th>
+            <th>Cód/Barra</th>
+            <th class="text-center">Quant.</th>
+            <th class="text-center">NCM</th>
+            <th class="text-center">CST</th>
+            <th class="text-center">CFOP</th>
+            <th class="text-center">Unid.</th>
+            <th class="text-center">Valor</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of listProducts; let i = index" [attr.data-index]="i">
+            <td class="text-center">{{product.id}}</td>
+            <td>{{product.name}}</td>
+            <td>{{product.barCode}}</td>
+            <td class="text-center">{{product.quantity}}</td>
+            <td class="text-center">{{product.productOther.ncm}}</td>
+            <td class="text-center">{{product.productOther.cstNumber}}</td>
+            <td class="text-center">{{product.productOther.cfop}}</td>
+            <td class="text-center">{{product.unity}}</td>
+            <td class="text-center">{{product.priceValue}}</td>
+            <td (click)="removeProduct(i)"><span class="fa fa-trash"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div bsModal id="modalSearchClient" #modalSearchClient="bs-modal" class="modal fade"
+       tabindex="-1" role="dialog"
+       aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <app-modal-search-client (notify)="onNotify($event)" [modal]="modalSearchClient"></app-modal-search-client>
+  </div>
+
+  <div bsModal id="modalSearchProduct" #modalSearchProduct="bs-modal" class="modal fade"
+       tabindex="-1" role="dialog"
+       aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <app-modal-search-product (notify)="onNotify($event)" [modal]="modalSearchProduct"></app-modal-search-product>
+  </div>
+
+</div>

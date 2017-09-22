@@ -32,7 +32,13 @@ import {ModalModule} from 'ngx-bootstrap';
 import {EmployeeService} from './employee/employee.service';
 import {LocalStorageModule} from 'angular-2-local-storage';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ToastModule} from "ng2-toastr";
+import {ToastyModule} from 'ng2-toasty';
+import { BudgetComponent } from './budget/budget.component';
+import {BudgetService} from './budget/budget.service';
+import { ModalSearchClientComponent } from './budget/modal-search-client/modal-search-client.component';
+import { ModalSearchProductComponent } from './budget/modal-search-product/modal-search-product.component';
+import {ToastModule} from 'ng2-toastr';
+import {BudgetProductsService} from "./budget/budget-products.service";
 
 @NgModule({
   declarations: [
@@ -47,7 +53,10 @@ import {ToastModule} from "ng2-toastr";
     SaleResumeComponent,
     ReportComponent,
     LiberationComponent,
-    ModalClientLiberationComponent
+    ModalClientLiberationComponent,
+    BudgetComponent,
+    ModalSearchClientComponent,
+    ModalSearchProductComponent
   ],
   imports: [
     BrowserModule,
@@ -65,6 +74,8 @@ import {ToastModule} from "ng2-toastr";
       prefix: 'my-app',
       storageType: 'localStorage'
     }),
+    ToastyModule.forRoot(),
+    ModalModule.forRoot(),
     ToastModule.forRoot()
   ],
   providers: [
@@ -75,8 +86,11 @@ import {ToastModule} from "ng2-toastr";
     ProductFamilyService,
     SightSaleService,
     LiberationService,
-    EmployeeService
+    EmployeeService,
+    BudgetService,
+    BudgetProductsService
   ],
+  exports: [BrowserModule, ToastyModule],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

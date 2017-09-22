@@ -14,5 +14,7 @@ export class Client {
   public complement: string;
   public neighborhood: string;
   public city: string;
+  public stateRegistration: string;
+  public uf: string;
   public liberation: Liberation;
 }

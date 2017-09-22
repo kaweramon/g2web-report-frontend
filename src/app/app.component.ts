@@ -1,5 +1,5 @@
 import {Component, ViewContainerRef} from '@angular/core';
-import {ToastsManager} from 'ng2-toastr';
+import {ToastsManager} from "ng2-toastr";
 
 @Component({
   selector: 'app-root',
@@ -9,7 +9,7 @@ import {ToastsManager} from 'ng2-toastr';
 export class AppComponent {
   public reportCategorySelect: string = 'quickSell';
 
-  constructor(public toastr: ToastsManager, vRef: ViewContainerRef) {
-    this.toastr.setRootViewContainerRef(vRef);
+  constructor(public toastr: ToastsManager, vcr: ViewContainerRef) {
+    this.toastr.setRootViewContainerRef(vcr);
   }
 }
