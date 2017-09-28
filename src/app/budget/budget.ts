@@ -1,3 +1,5 @@
+import {Product} from '../product/product';
+
 export class Budget {
   public id;
   public saleDate: Date;
@@ -23,4 +25,5 @@ export class Budget {
   public budgetCounter: number;
   public status: string;
   public validity: Date;
+  public listBudgetProducts: Array<Product>;
 }

@@ -21,6 +21,22 @@ export class BudgetService {
       {headers: this.headers}).map(this.extractData);
   }
 
+  public update(budget: Budget): Observable<Budget> {
+    this.params.set('budgetId', budget.id);
+    return this.http.put(this.urlBudget, budget, {headers: this.headers, search: this.params}).map(this.extractData);
+  }
+
+  public search(query: string): Observable<Array<Budget>> {
+    this.params.set('query', query);
+    return this.http.get(this.urlBudget + '/search', {headers: this.headers, search: this.params})
+      .map(this.extractData);
+  }
+
+  public deleteBudget(budgetId: number): Observable<any> {
+    this.params.set('budgetId', budgetId.toString());
+    return this.http.delete(this.urlBudget, {headers: this.headers, search: this.params}).map(this.extractData);
+  }
+
   private extractData(res: Response) {
     return res.text() ? res.json() : {};
   }

@@ -8,17 +8,17 @@
     </div>
     <div class="modal-body">
       <div class="row">
-        <div class="col-lg-7 col-md-7">
+        <div class="col-lg-7 col-md-7 col-xs-12">
           <label for="inputClientName" class="control-label">Nome / Referência</label>
           <input type="text" class="form-control" name="clientNameFantasy" id="inputClientName" placeholder="Nome ou Fantasia"
                  [(ngModel)]="productNameReference" (keyup.enter)="searchProduct()">
         </div>
-        <div class="col-lg-2 col-md-2">
+        <div class="col-lg-2 col-md-2 col-xs-12">
           <label for="inputId" class="control-label">Código</label>
           <input type="number" class="form-control" id="inputId" name="clientId" [(ngModel)]="productId" placeholder="Código"
                  (keyup.enter)="searchProduct()">
         </div>
-        <div class="col-lg-3 col-md-3">
+        <div class="col-lg-3 col-md-3 col-xs-12">
           <button class="btn btn-primary pull-right" (click)="searchProduct()" style="margin-top: 25px;">
             <span class="fa fa-search"></span>
             Pesquisar
@@ -28,30 +28,38 @@
       <div class="row" *ngIf="listProducts !== undefined && listProducts.length > 0">
         <table class="table table-striped">
           <thead>
-            <tr>
-              <th>Cód.</th>
-              <th>Discriminação</th>
-              <th>Referência</th>
-              <th>Cód/Barra</th>
-              <th>Valor</th>
-              <th>NCM</th>
-              <th>CFOP</th>
-              <th>CST</th>
-            </tr>
+          <tr>
+            <th class="text-center">Cód.</th>
+            <th>Discriminação</th>
+            <th class="hidden-xs">Referência</th>
+            <th class="hidden-xs">Cód/Barra</th>
+            <th class="text-center">Valor</th>
+            <th class="text-center hidden-xs">NCM</th>
+            <th class="text-center hidden-xs">CFOP</th>
+            <th class="text-center">CST</th>
+          </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let product of listProducts" (click)="selectProduct(product)">
-              <td>{{product.id}}</td>
-              <td>{{product.name}}</td>
-              <td>{{product.reference}}</td>
-              <td>{{product.barCode}}</td>
-              <td>{{product.priceValue}}</td>
-              <td>{{product.productOther.ncm}}</td>
-              <td>{{product.productOther.cfop}}</td>
-              <td>{{product.productOther.cstNumber}}</td>
-            </tr>
+          <tr *ngFor="let product of listProducts | paginate: { itemsPerPage: 5, currentPage: p }" (click)="selectProduct(product)">
+            <td class="text-center">{{product.id}}</td>
+            <td>{{product.name}}</td>
+            <td class="hidden-xs">{{product.reference}}</td>
+            <td class="hidden-xs">{{product.barCode}}</td>
+            <td class="text-center">{{product.priceValue}}</td>
+            <td class="text-center hidden-xs">{{product.productOther.ncm}}</td>
+            <td class="text-center hidden-xs">{{product.productOther.cfop}}</td>
+            <td class="text-center">{{product.productOther.cstNumber}}</td>
+          </tr>
           </tbody>
         </table>
+      </div>
+      <div class="row" *ngIf="listProducts !== undefined && listProducts.length > 0">
+        <div class="col-lg-12 col-md-12">
+          <pagination-controls previousLabel="Anterior"
+                               nextLabel="Próximo"
+                               (pageChange)="p = $event">
+          </pagination-controls>
+        </div>
       </div>
     </div>
     <div class="modal-footer">

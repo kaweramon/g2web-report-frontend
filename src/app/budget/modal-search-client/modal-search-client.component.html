@@ -2,23 +2,23 @@
   <div class="modal-content">
     <div class="modal-header">
       <h4 class="modal-title pull-left">Procurar Cliente</h4>
-      <button type="button" class="close pull-right" (click)="modal.hide();" aria-label="Close">
+      <button type="button" class="close pull-right" (click)="modal.hide(); resetFields();" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
     <div class="modal-body">
       <div class="row">
-        <div class="col-lg-7 col-md-7">
+        <div class="col-lg-7 col-md-7  col-sm-6 col-xs-6">
           <label for="inputClientName" class="control-label">Nome / Fantasia</label>
           <input type="text" class="form-control" name="clientNameFantasy" id="inputClientName" placeholder="Nome ou Fantasia"
                  [(ngModel)]="productNameReference" (keyup.enter)="searchClient()">
         </div>
-        <div class="col-lg-2 col-md-2">
+        <div class="col-lg-2 col-md-2  col-sm-3 col-xs-3">
           <label for="inputId" class="control-label">Código</label>
           <input type="number" class="form-control" id="inputId" name="clientId" [(ngModel)]="clientId" placeholder="Código"
                  (keyup.enter)="searchClient()">
         </div>
-        <div class="col-lg-3 col-md-3">
+        <div class="col-lg-3 col-md-3  col-sm-3 col-xs-3">
           <button class="btn btn-primary pull-right" (click)="searchClient()" style="margin-top: 25px;">
             <span class="fa fa-search"></span>
             Pesquisar
@@ -37,7 +37,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let client of listClients" (click)="selectClient(client)">
+            <tr *ngFor="let client of listClients | paginate: { itemsPerPage: 5, currentPage: p }" (click)="selectClient(client)">
               <td>{{client.id}}</td>
               <td>{{client.name}}</td>
               <td>{{client.fantasyName}}</td>
@@ -52,9 +52,17 @@
           </tbody>
         </table>
       </div>
+      <div class="row" *ngIf="listClients !== undefined && listClients.length > 0">
+        <div class="col-lg-12 col-md-12">
+          <pagination-controls previousLabel="Anterior"
+                               nextLabel="Próximo"
+                               (pageChange)="p = $event">
+          </pagination-controls>
+        </div>
+      </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-default" (click)="modal.hide();">Fechar</button>
+      <button class="btn btn-default" (click)="modal.hide(); resetFields()">Fechar</button>
     </div>
   </div>
 </div>

@@ -39,6 +39,9 @@ import { ModalSearchClientComponent } from './budget/modal-search-client/modal-s
 import { ModalSearchProductComponent } from './budget/modal-search-product/modal-search-product.component';
 import {ToastModule} from 'ng2-toastr';
 import {BudgetProductsService} from "./budget/budget-products.service";
+import { ModalSearchEmployeeSalesmanComponent } from './budget/modal-search-employee-salesman/modal-search-employee-salesman.component';
+import { ModalSearchBudgetComponent } from './budget/modal-search-budget/modal-search-budget.component';
+import { ModalDeleteBudgetComponent } from './budget/modal-delete-budget/modal-delete-budget.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +59,10 @@ import {BudgetProductsService} from "./budget/budget-products.service";
     ModalClientLiberationComponent,
     BudgetComponent,
     ModalSearchClientComponent,
-    ModalSearchProductComponent
+    ModalSearchProductComponent,
+    ModalSearchEmployeeSalesmanComponent,
+    ModalSearchBudgetComponent,
+    ModalDeleteBudgetComponent
   ],
   imports: [
     BrowserModule,

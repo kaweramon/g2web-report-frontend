@@ -17,8 +17,9 @@ export class ClientService {
       .map(res => res.json());
   }
 
-  public searchClients(search: string): Observable<Client[]> {
+  public searchClients(search: string, isLiberation: any): Observable<Client[]> {
     this.params.set('search', search);
+    this.params.set('isLiberation', isLiberation);
     return this.http.get(this.urlClient + '/search', {headers: this.headers, search: this.params}).map(res => res.json());
   }
 

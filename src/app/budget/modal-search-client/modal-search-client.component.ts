@@ -38,7 +38,7 @@ export class ModalSearchClientComponent {
         query += 'name=' + this.productNameReference + ',fantasyName=' + this.productNameReference;
       }
     }
-    this.clientService.searchClients(query).subscribe(result => {
+    this.clientService.searchClients(query, false).subscribe(result => {
       this.listClients = result;
     });
   }
@@ -46,6 +46,13 @@ export class ModalSearchClientComponent {
   public selectClient(client: Client): void {
     this.notify.emit({client: client});
     this.modal.hide();
+    this.resetFields();
+  }
+
+  public resetFields(): void {
+    this.productNameReference = '';
+    this.listClients = [];
+    document.getElementById('inputId').textContent = '';
   }
 
 }

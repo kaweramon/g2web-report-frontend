@@ -55,7 +55,7 @@ export class LiberationComponent {
 
   public searchClients(): void {
     this.slimLoadingBarService.start();
-    this.clientService.searchClients(this.buildQuery()).subscribe(result => {
+    this.clientService.searchClients(this.buildQuery(), true).subscribe(result => {
       this.listClients = result;
       this.slimLoadingBarService.stop();
       this.slimLoadingBarService.complete();
