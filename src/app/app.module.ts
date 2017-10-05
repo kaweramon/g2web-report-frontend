@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import {LOCALE_ID, NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import 'rxjs/add/operator/map';
@@ -38,10 +38,12 @@ import {BudgetService} from './budget/budget.service';
 import { ModalSearchClientComponent } from './budget/modal-search-client/modal-search-client.component';
 import { ModalSearchProductComponent } from './budget/modal-search-product/modal-search-product.component';
 import {ToastModule} from 'ng2-toastr';
-import {BudgetProductsService} from "./budget/budget-products.service";
+import {BudgetProductsService} from './budget/budget-products.service';
 import { ModalSearchEmployeeSalesmanComponent } from './budget/modal-search-employee-salesman/modal-search-employee-salesman.component';
 import { ModalSearchBudgetComponent } from './budget/modal-search-budget/modal-search-budget.component';
 import { ModalDeleteBudgetComponent } from './budget/modal-delete-budget/modal-delete-budget.component';
+import { ModalEditDiscountAndIncreaseComponent } from './budget/modal-edit-discount-and-increase/modal-edit-discount-and-increase.component';
+import {CurrencyMaskModule} from 'ng2-currency-mask';
 
 @NgModule({
   declarations: [
@@ -62,7 +64,8 @@ import { ModalDeleteBudgetComponent } from './budget/modal-delete-budget/modal-d
     ModalSearchProductComponent,
     ModalSearchEmployeeSalesmanComponent,
     ModalSearchBudgetComponent,
-    ModalDeleteBudgetComponent
+    ModalDeleteBudgetComponent,
+    ModalEditDiscountAndIncreaseComponent
   ],
   imports: [
     BrowserModule,
@@ -82,7 +85,8 @@ import { ModalDeleteBudgetComponent } from './budget/modal-delete-budget/modal-d
     }),
     ToastyModule.forRoot(),
     ModalModule.forRoot(),
-    ToastModule.forRoot()
+    ToastModule.forRoot(),
+    CurrencyMaskModule
   ],
   providers: [
     QuickSellService,
@@ -94,7 +98,8 @@ import { ModalDeleteBudgetComponent } from './budget/modal-delete-budget/modal-d
     LiberationService,
     EmployeeService,
     BudgetService,
-    BudgetProductsService
+    BudgetProductsService,
+    { provide: LOCALE_ID, useValue: 'pt-BR' }
   ],
   exports: [BrowserModule, ToastyModule],
   bootstrap: [AppComponent]

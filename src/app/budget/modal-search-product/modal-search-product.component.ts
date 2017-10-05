@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ModalDirective} from 'ngx-bootstrap';
 import {Product} from '../../product/product';
 import {ProductService} from "../../product/product.service";
+import {ToastsManager} from "ng2-toastr";
 
 @Component({
   selector: 'app-modal-search-product',
@@ -24,7 +25,7 @@ export class ModalSearchProductComponent {
 
   public productBarCode: string;
 
-  constructor(private productService: ProductService) { }
+  constructor(private productService: ProductService, public toastr: ToastsManager) { }
 
   public searchProduct(): void {
     let query = '';
@@ -47,6 +48,8 @@ export class ModalSearchProductComponent {
     }
     this.productService.search(query).subscribe(result => {
       this.listProducts = result;
+    }, error => {
+      this.toastr.error(error.json().message, 'Error');
     });
   }
 

@@ -11,6 +11,8 @@ export class Product {
   public reference: string;
   public unity: string;
   public quantity: number;
+  public discount: number;
+  public increase: number;
   public productOther: ProductOthers;
   public productGroup: ProductGroup;
   public productFamily: ProductFamily;

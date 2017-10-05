@@ -50,7 +50,6 @@ export class ModalSearchBudgetComponent {
     if (this.budgetFilter.obs !== null && this.budgetFilter.obs !== undefined && this.budgetFilter.obs.length > 0) {
       query += ',obs=' + this.budgetFilter.obs;
     }
-    console.log(query);
     this.service.search(query).subscribe(result => {
       this.listBudgets = result;
     }, error => {

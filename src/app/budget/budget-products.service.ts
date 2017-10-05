@@ -17,6 +17,12 @@ export class BudgetProductsService {
       {headers: this.headers}).map(this.extractData);
   }
 
+  public update(listBudgetProducts: Array<BudgetProducts>, budgetId: number): Observable<any> {
+    this.params.set('budgetId', budgetId.toString());
+    return this.http.put(this.urlBudgetProducts, listBudgetProducts,
+      {headers: this.headers, search: this.params}).map(this.extractData);
+  }
+
   public deleteBudgetProducts(budgetId: number): Observable<any> {
     this.params.set('budgetId', budgetId.toString());
     return this.http.delete(this.urlBudgetProducts, {headers: this.headers, search: this.params}).map(this.extractData);

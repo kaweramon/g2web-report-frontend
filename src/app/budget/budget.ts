@@ -1,4 +1,5 @@
 import {Product} from '../product/product';
+import {BudgetProducts} from "./budget-products";
 
 export class Budget {
   public id;
@@ -7,7 +8,6 @@ export class Budget {
   public total: number;
   public salesman: string;
   public hour: Date;
-  public percentDiscount: number;
   public totalWithDiscount: number;
   public obs: string;
   public delivered: string;
@@ -20,10 +20,21 @@ export class Budget {
   public additionalInf: string;
   public freightModality: string;
   public discountValue: number;
+  public increaseValue: number;
+  public discountPercent: number;
+  public increasePercent: number;
   public operatorId: number;
   public operatorName: string;
   public budgetCounter: number;
   public status: string;
   public validity: Date;
-  public listBudgetProducts: Array<Product>;
+  public listBudgetProducts: Array<BudgetProducts>;
+
+  constructor() {
+    this.increasePercent = 0;
+    this.increaseValue = 0;
+    this.discountPercent = 0;
+    this.discountValue = 0;
+    this.totalWithDiscount = 0;
+  }
 }
