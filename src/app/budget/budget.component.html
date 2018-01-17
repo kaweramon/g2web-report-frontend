@@ -28,14 +28,11 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-lg-10 col-md-10 col-sm-9 col-xs-9">
+    <div class="col-lg-8 col-md-8">
       <button class="btn btn-primary" (click)="addBudget()" [disabled]="budget !== undefined">
         <span class="fa fa-plus"></span>&nbsp;Adicionar
       </button>
-      <button class="btn btn-default" (click)="resetBuget()" [disabled]="budget === undefined">
-        <span class="fa fa-times-circle"></span>&nbsp;Cancelar
-      </button>
-      <button class="btn btn-default" type="button"
+      <button class="btn btn-success" type="button"
               (click)="saveBuget()"
               [disabled]="budget === undefined || listBudgetProducts.length === 0 || client === null || client === undefined
                           || client?.id === undefined">
@@ -44,81 +41,100 @@
       <button class="btn btn-default" type="button" (click)="modalSearchBudget.show()">
         <span class="fa fa-search"></span>&nbsp;Procurar
       </button>
-      <button class="btn btn-default" type="button" (click)="modalDeleteBudget.show()"
-          [disabled]="budget === undefined || client === undefined || listBudgetProducts === undefined
+      <button class="btn btn-default" (click)="resetBuget()" [disabled]="budget === undefined">
+        <span class="fa fa-times-circle"></span>&nbsp;Cancelar
+      </button>
+      <button class="btn btn-danger" type="button" (click)="modalDeleteBudget.show()"
+              [disabled]="budget === undefined || client === undefined || listBudgetProducts === undefined
           || listBudgetProducts.length === 0">
         <span class="fa fa-trash"></span>&nbsp;Excluir
       </button>
     </div>
-    <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
-      <button class="btn btn-primary margin-left-btn-sing-out"
-              (click)="logOut()"><span class="fa fa-sign-out"></span>&nbsp;Sair</button>
+    <div class="col-lg-4">
+      <div class="row">
+        <div class="col-lg-8 col-sm-8">
+          <button class="btn btn-primary pull-right" (click)="goToReports()">
+            <span class="fa fa-line-chart"></span>&nbsp;Relatórios
+          </button>
+        </div>
+        <div class="col-lg-4 col-md-4">
+          <button class="btn btn-primary margin-left-btn-sing-out pull-right"
+                  (click)="logOut()"><span class="fa fa-sign-out"></span>&nbsp;Sair</button>
+        </div>
+      </div>
     </div>
   </div>
+
   <div class="row" style="margin-top: 15px;">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <div class="row" style="display: flex; align-items: center">
-          <div class="col-lg-10 col-md-9 col-sm-10 col-xs-6">
-            <h3><span class="fa fa-cog"></span>&nbsp;Usuário / Vendedor</h3>
-          </div>
-          <div class="col-lg-2 col-md-3 col-sm-2 col-xs-6">
-            <button class="btn btn-primary" (click)="modalSearchSalesman.show()">
-              <span class="fa fa-pencil"></span>&nbsp;Alterar Vendedor
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="panel-body">
-        <div class="row">
-          <div class="col-lg-12 col-md-12">
-            Operador: {{employee?.id}} - {{employee?.name}}
+    <div class="col-lg-6 col-sm-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="row" style="display: flex; align-items: center">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <h3><span class="fa fa-cog"></span>&nbsp;Usuário / Vendedor</h3>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <button class="btn btn-primary pull-right" disabled="disabled" id="btnUpdateSalesMan"
+                      (click)="modalSearchSalesman.show()">
+                <span class="fa fa-pencil"></span>&nbsp;Alterar Vendedor
+              </button>
+            </div>
           </div>
         </div>
-        <div class="row" *ngIf="budget">
-          <div class="col-lg-12 col-md-12">
-            Número do Orçamento: {{budget?.budgetCounter + 1}}
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-lg-12 col-md-12">
+              Operador: {{employee?.id}} - {{employee?.name}}
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
-            Vendedor: {{salesman?.id}} - {{salesman?.name}}
+          <div class="row" *ngIf="budget">
+            <div class="col-lg-12 col-md-12">
+              Número do Orçamento: {{budget?.budgetCounter + 1}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
+              Vendedor: {{salesman?.id}} - {{salesman?.name}}
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="row" *ngIf="budget">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <div class="row" style="display: flex;align-items: center">
-          <div class="col-lg-10 col-md-9 col-sm-10 col-xs-6">
-            <h3><span class="fa fa-user"></span> Cliente</h3>
-          </div>
-          <div class="col-lg-2 col-md-3 col-sm-2 col-xs-6">
-            <button class="btn btn-primary" style="min-width: 146px;" (click)="modalSearchClient.show()">
-              <span class="fa fa-pencil"></span>&nbsp;Alterar Cliente
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="panel-body">
-        <div class="row" *ngIf="client?.id && client?.name">
-          <div class="col-lg-12 col-md-12">
-            {{client?.id}} - {{client?.name}}
+    <div class="col-lg-6 col-sm-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="row" style="display: flex;align-items: center">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+              <h3><span class="fa fa-user"></span> Cliente</h3>
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+              <button class="btn btn-primary pull-right" disabled="disabled" style="min-width: 146px;"
+                      (click)="modalSearchClient.show()" id="btnUpdateClient">
+                <span class="fa fa-pencil"></span>&nbsp;Alterar Cliente
+              </button>
+            </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-lg-12 col-md-12" *ngIf="client?.cnpj !== null && client?.cnpj !== undefined && client?.cnpj.length > 0">
-            CNPJ: {{client?.cnpj}}
+        <div class="panel-body">
+          <div class="row" *ngIf="client?.id && client?.name">
+            <div class="col-lg-12 col-md-12">
+              {{client?.id}} - {{client?.name}}
+            </div>
           </div>
-          <div class="col-lg-12 col-md-12" *ngIf="client?.cpf !== null && client?.cpf !== undefined && client?.cpf.length > 0">
-            CPF: {{client?.cpf}}
+          <div class="row">
+            <div class="col-lg-12 col-md-12" *ngIf="client?.cnpj !== null && client?.cnpj !== undefined
+              && client?.cnpj.length > 0">
+              CNPJ: {{client?.cnpj}}
+            </div>
+            <div class="col-lg-12 col-md-12" *ngIf="client?.cpf !== null && client?.cpf !== undefined
+              && client?.cpf.length > 0">
+              CPF: {{client?.cpf}}
+            </div>
           </div>
-        </div>
-        <div class="row" *ngIf="client?.uf">
-          <div class="col-lg-12 col-md-12">
-            UF: {{client?.uf}}
+          <div class="row" *ngIf="client?.uf">
+            <div class="col-lg-12 col-md-12">
+              UF: {{client?.uf}}
+            </div>
           </div>
         </div>
       </div>
@@ -126,12 +142,12 @@
   </div>
 
   <div class="row" *ngIf="budget !== undefined">
-    <div class="col-lg-3 col-md-3 form-group" style="padding: 0px">
+    <div class="col-lg-3 col-md-3 form-group">
       <label for="inputBudgetSaleDate" class="label-control">Data:</label>
       <input type="text" [textMask]="{mask: dateMask}" class="form-control" id="inputBudgetSaleDate"
              name="dateFrom" [(ngModel)]="saleDateStr" placeholder="dd/mm/aaaa">
     </div>
-    <div class="col-lg-9 col-md-9 form-group" style="padding-right: 0;">
+    <div class="col-lg-9 col-md-9 form-group">
       <label for="inputBudgetObs" class="label-control">Observações</label>
       <textarea name="obs" [(ngModel)]="budget.obs" id="inputBudgetObs"
                 cols="30" rows="3" class="form-control">
@@ -139,74 +155,86 @@
     </div>
   </div>
   <div class="row">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <div class="row" style="display: flex;align-items: center">
-          <div class="col-lg-2 col-md-2 col-sm-8 col-xs-10">
-            <h3><span class="fa fa-shopping-cart"></span>&nbsp;Produtos</h3>
-          </div>
-          <div class="col-lg-2 col-md-2" style="margin-top: 5px;">
-            <button [disabled]="budget === undefined" class="btn btn-primary"
-                    (click)="modalSearchProduct.show()">
-              <span class="fa fa-search"></span>&nbsp;Pesquisar
-            </button>
+    <div class="col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="row" style="display: flex;align-items: center">
+            <div class="col-lg-2 col-md-2 col-sm-8 col-xs-10">
+              <h3><span class="fa fa-shopping-cart"></span>&nbsp;Produtos</h3>
+            </div>
+            <div class="col-lg-2 col-md-2" style="margin-top: 5px;">
+              <button class="btn btn-primary"
+                      (click)="showModalSearchProduct()">
+                <span class="fa fa-search"></span>&nbsp;Pesquisar
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="panel-body">
-        <div class="row">
-          <div class="col-lg-6 col-md-6 form-group">
+        <div class="panel-body">
+          <form novalidate [formGroup]="formBudgetProduct">
             <div class="row">
+              <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 form-group">
+                <label for="inputProductId" class="label-control">Cód.</label>
+                <input type="number" class="form-control" [(ngModel)]="budgetProduct.productId" name="productId"
+                  formControlName="productId" id="inputProductId">
+              </div>
+              <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                <label for="inputProductBarCode" class="label-control">Código de Barras:</label>
+                <input type="text" formControlName="barCodeProduct"
+                       id="inputProductBarCode" class="form-control" [(ngModel)]="barCode"
+                       name="barCode" (keyup.enter)="searchByBarCode()" (ngModelChange)="test($event)">
+              </div>
               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <label for="inputProductName" class="label-control">Nome:</label>
-                <input type="text" id="inputProductName" class="form-control" [(ngModel)]="budgetProduct.productName" name="name">
-              </div>
-              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                <label for="inputProductBarCode" class="label-control">Cód/Barra:</label>
-                <input type="text" disabled="disabled"
-                       id="inputProductBarCode" class="form-control" [(ngModel)]="budgetProduct.barCodeProduct" name="barCode">
+                <input type="text" id="inputProductName" class="form-control"
+                       formControlName="productName"
+                       [(ngModel)]="budgetProduct.productName" name="name">
               </div>
             </div>
             <div class="row">
-              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-group">
-                <label for="inputProductQuantity" class="label-control">Quant.</label>
-                <input type="number" id="inputProductQuantity" class="form-control" [(ngModel)]="budgetProduct.quantity" name="barCode">
+              <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 form-group">
+                <label for="inputProductQuantity" class="label-control">Quantidade</label>
+                <input type="number" id="inputProductQuantity" class="form-control" formControlName="quantity"
+                       (ngModelChange)="calculateSubTotalOnChangeQuantity($event)"
+                       [(ngModel)]="budgetProduct.quantity" name="barCode">
               </div>
-              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-group">
-                <label for="inputProductUnity" class="label-control">Uni.</label>
+              <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 form-group">
+                <label for="inputProductUnity" class="label-control">Unidade</label>
                 <input type="text" id="inputProductUnity" class="form-control" [(ngModel)]="budgetProduct.unity"
-                       name="unity" disabled="disabled">
+                       name="unity" formControlName="quantity" formControlName="unity">
               </div>
-              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-group">
+              <div class="col-lg-2 col-md-2 form-group">
+                <label for="inputProductDiscountPercent" class="label-control">Desc. %</label>
+                <input min="0" max="100" class="form-control" id="inputProductDiscountPercent"
+                       [(ngModel)]="budgetProduct.discountPercent"
+                       (ngModelChange)="calculateDiscountValue($event)"
+                       formControlName="discountPercent" currencyMask
+                       [options]="{ prefix: '% ', thousands: '.', decimal: ',' }">
+              </div>
+              <div class="col-lg-2 col-md-2 form-group">
+                <label for="inputProductIncreasePercent" class="label-control">Acrésc. %</label>
+                <input min="0" max="100" class="form-control" id="inputProductIncreasePercent"
+                       [(ngModel)]="budgetProduct.increasePercent"
+                       (ngModelChange)="calculateIncreaseValue($event)"
+                       formControlName="discountPercent" currencyMask
+                       [options]="{ prefix: '% ', thousands: '.', decimal: ',' }">
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 form-group">
                 <label for="inputProductPriceValue" class="label-control">Preço</label>
-                <input type="text" id="inputProductPriceValue" class="form-control" [(ngModel)]="budgetProduct.priceValue"
-                       (ngModelChange)="calculateIncreaseAndDiscountProduct($event)"
+                <input min="0" max="100" id="inputProductPriceValue" class="form-control"
+                       [(ngModel)]="budgetProduct.priceValue"
+                       (ngModelChange)="calculateSubTotal($event)"
+                       formControlName="priceValue"
                        name="priceValue" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }">
               </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-group">
-                <label for="inputProductDiscount" class="label-control">Desconto</label>
-                <input type="text" id="inputProductDiscount" class="form-control"
-                       [(ngModel)]="budgetProduct.discountValue"
-                       name="discount" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }">
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 form-group">
+                <label for="textProductSubtotal">Subtotal</label>
+                <span *ngIf="budgetProduct?.subTotal"
+                      class="form-control" id="textProductSubtotal">
+                  R$&nbsp;{{budgetProduct.subTotal | number : '1.2-2'}}
+                </span>
               </div>
-              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-group">
-                <label for="inputProductIncrease" class="label-control">Acréscimo</label>
-                <input type="text" id="inputProductIncrease" class="form-control"
-                       [(ngModel)]="budgetProduct.increaseValue"
-                       name="discount" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }">
-              </div>
-              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-group"
-                   *ngIf="budgetProduct.priceValue && budgetProduct.increaseValue !== undefined
-                   && budgetProduct.discountValue !== undefined">
-                <label class="label-control">Preço Atualizado</label>
-                <h3 style="margin-top: 10px;">
-                  R$&nbsp;{{((currentBudgetProductPrice + budgetProduct.increaseValue) - budgetProduct.discountValue)
-                      | number : '1.2-2'}}
-                </h3>
-              </div>
-              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-group">
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 form-group">
                 <button class="btn btn-primary pull-right" (click)="addProduct()" style="margin-top: 25px;"
                         [disabled]="budgetProduct.productName === undefined || budgetProduct.productId === undefined
                             || budgetProduct.priceValue === undefined">
@@ -214,51 +242,58 @@
                 </button>
               </div>
             </div>
-          </div>
-          <div class="col-lg-6 col-md-6 form-group"
-               *ngIf="listBudgetProducts && listBudgetProducts.length > 0"
-               style="background-color: rgba(255, 255, 0, 0.22);">
-            <table class="table table-striped table-fixed">
-              <thead class="table table-striped" style="background-color: rgba(255, 255, 0, 0.22);">
-              <tr>
-                <th class="text-center col-xs-1 col-lg-1 col-md-1">Cód.</th>
-                <th class="col-xs-4 col-lg-4 col-md-4">Discriminação</th>
-                <th class="text-center col-xs-1 col-lg-1 col-md-1">Qtd.</th>
-                <th class="text-center col-xs-1 col-lg-1 col-md-1">Un.</th>
-                <th class="text-center col-xs-2 col-lg-2 col-md-2">Des/Acrés</th>
-                <th class="text-center col-xs-2 col-lg-2 col-md-2">Valor</th>
-                <th class="text-center col-xs-1 col-lg-1 col-md-1">&nbsp;</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr *ngFor="let budgetProduct of listBudgetProducts; let i = index" [attr.data-index]="i">
-                <td class="text-center col-xs-1 col-lg-1 col-md-1">{{budgetProduct.productId}}</td>
-                <td class="col-xs-4 col-lg-4 col-md-4">{{budgetProduct.productName | slice:0:15}}</td>
-                <td class="text-center col-xs-1 col-lg-1 col-md-1">{{budgetProduct.quantity}}</td>
-                <td class="text-center col-xs-1 col-lg-1 col-md-1">{{budgetProduct.unity}}</td>
-                <td class="text-center col-xs-2 col-lg-2 col-md-2">
-                  <span class="fa fa-long-arrow-up" *ngIf="budgetProduct.increaseValue > budgetProduct.discountValue"
-                        style="color: green"></span>
-                  <span class="fa fa-long-arrow-down" *ngIf="budgetProduct.increaseValue < budgetProduct.discountValue"
-                        style="color: red"></span>
-                  {{budgetProduct.discountValue}} / {{budgetProduct.increaseValue}}
-                </td>
-                <td class="text-center col-xs-2 col-lg-2 col-md-2">
-                  {{((budgetProduct.priceValue + budgetProduct.increaseValue) - budgetProduct.discountValue)
-                      | number : '1.2-2'}}
-                </td>
-                <td class="col-xs-1 col-lg-1 col-md-1" (click)="removeProduct(i)"><span class="fa fa-trash"></span></td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
-
-  <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-10 col-xs-12">
+  <div class="row" style="margin: 0px;">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
+         *ngIf="listBudgetProducts && listBudgetProducts.length > 0"
+         style="background-color: rgba(255, 255, 0, 0.22);">
+      <table class="table">
+        <thead style="background-color: rgba(255, 255, 0, 0.22);">
+        <tr>
+          <th class="text-center col-xs-1 col-lg-1 col-md-1">Cód.</th>
+          <th class="col-xs-3 col-lg-3 col-md-3">Discriminação</th>
+          <th class="text-center col-xs-1 col-lg-1 col-md-1">Qtd.</th>
+          <th class="text-center col-xs-1 col-lg-1 col-md-1">Un.</th>
+          <th class="text-center col-xs-2 col-lg-2 col-md-2">Desc./Acrés. (%)</th>
+          <th class="text-center col-xs-1 col-lg-1 col-md-1">Valor</th>
+          <th class="text-center col-xs-1 col-lg-1 col-md-1">Subtotal</th>
+          <th class="text-center col-xs-1 col-lg-1 col-md-1">&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let budgetProduct of listBudgetProducts; let i = index" [attr.data-index]="i">
+          <td class="text-center col-xs-1 col-lg-1 col-md-1">{{budgetProduct.productId}}</td>
+          <td class="col-xs-3 col-lg-3 col-md-3">{{budgetProduct.productName | slice:0:30}}</td>
+          <td class="text-center col-xs-1 col-lg-1 col-md-1">{{budgetProduct.quantity}}</td>
+          <td class="text-center col-xs-1 col-lg-1 col-md-1">{{budgetProduct.unity}}</td>
+          <td class="text-center col-xs-2 col-lg-2 col-md-2">
+            <p *ngIf="(budgetProduct.discountPercent && budgetProduct.discountPercent > 0) ||
+            (budgetProduct.increasePercent && budgetProduct.increasePercent > 0)">
+              <span class="fa fa-long-arrow-down" *ngIf="budgetProduct.increaseValue < budgetProduct.discountValue"
+                    style="color: red"></span>
+              {{budgetProduct.discountPercent}} / {{budgetProduct.increasePercent}}
+              <span class="fa fa-long-arrow-up" *ngIf="budgetProduct.increaseValue > budgetProduct.discountValue"
+                    style="color: green"></span>
+            </p>
+          </td>
+          <td class="text-center col-xs-1 col-lg-1 col-md-1">
+            {{budgetProduct.priceValue | number : '1.2-2'}}
+          </td>
+          <td class="text-center col-xs-1 col-lg-1 col-md-1">
+            {{budgetProduct.subTotal | number : '1.2-2'}}
+          </td>
+          <td class="col-xs-1 col-lg-1 col-md-1" (click)="removeProduct(i)"><span class="fa fa-trash"></span></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row" style="margin-top: 15px">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
       <div class="panel panel-default">
         <div class="panel-heading">
           <div class="row">
@@ -294,7 +329,6 @@
             </div>
           </div>
           <div class="col-lg-4 col-md-4 col-sm-6 col-xs-4">
-            <!--<h1 class="text-center">{{((totalProducts - discountValue) + increaseValue) | currency:'BRL':true: '1.2-2'}}</h1>-->
             <h1 class="text-center">R$&nbsp;{{((totalProducts - budget?.discountValue) + budget?.increaseValue)
               | number : '1.2-2'}}</h1>
           </div>
@@ -303,15 +337,17 @@
     </div>
   </div>
   <div bsModal id="modalSearchClient" #modalSearchClient="bs-modal" class="modal fade"
-       tabindex="-1" role="dialog"
+       tabindex="-1" role="dialog" (onShown)="onShowModalSearchClient()"
        aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <app-modal-search-client (notify)="onNotify($event)" [modal]="modalSearchClient"></app-modal-search-client>
+    <app-modal-search-client (notify)="onNotify($event)"
+                             [modal]="modalSearchClient"></app-modal-search-client>
   </div>
 
   <div bsModal id="modalSearchProduct" #modalSearchProduct="bs-modal" class="modal fade"
-       tabindex="-1" role="dialog"
+       tabindex="-1" role="dialog" (onShown)="onShowModalSearchProduct()"
        aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <app-modal-search-product (notify)="onNotify($event)" [modal]="modalSearchProduct"></app-modal-search-product>
+    <app-modal-search-product (notify)="onNotify($event)"
+                              [modal]="modalSearchProduct"></app-modal-search-product>
   </div>
 
   <div bsModal id="modalSearchSalesman" #modalSearchSalesman="bs-modal" class="modal fade"
@@ -322,7 +358,7 @@
   </div>
 
   <div bsModal id="modalSearchBudget" #modalSearchBudget="bs-modal" class="modal fade"
-       tabindex="-1" role="dialog"
+       tabindex="-1" role="dialog" (onShown)="onShowModalSearchBudget($event)"
        aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <app-modal-search-budget [modal]="modalSearchBudget" (notify)="onNotify($event)"></app-modal-search-budget>
   </div>

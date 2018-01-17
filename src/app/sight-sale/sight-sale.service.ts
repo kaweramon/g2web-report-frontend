@@ -6,7 +6,8 @@ import {SightSale} from './sight-sale';
 @Injectable()
 export class SightSaleService {
 
-  private urlQuickSellReport: string = 'http://localhost:8080/sight-sale';
+  // private urlQuickSellReport: string = 'http://localhost:8080/sight-sale';
+  private urlQuickSellReport = '/sight-sale';
   headers = new Headers({ 'Content-Type': 'application/json' });
   private params = new URLSearchParams();
 

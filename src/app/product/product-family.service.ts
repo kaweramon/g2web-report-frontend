@@ -6,7 +6,8 @@ import {ProductFamily} from './product-family';
 @Injectable()
 export class ProductFamilyService {
 
-  private urlProductFamilies = 'http://localhost:8080/product-family';
+  // private urlProductFamilies = 'http://localhost:8080/product-family';
+  private urlProductFamilies = '/product-family';
   headers = new Headers({ 'Content-Type': 'application/json' });
   private params = new URLSearchParams();
 

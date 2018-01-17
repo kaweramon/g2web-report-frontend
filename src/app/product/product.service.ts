@@ -7,6 +7,7 @@ import {Product} from './product';
 export class ProductService {
 
   private urlProduct = 'http://localhost:8080/product';
+  // private urlProduct = '/product';
   headers = new Headers({ 'Content-Type': 'application/json' });
   params: URLSearchParams = new URLSearchParams();
 
@@ -20,4 +21,12 @@ export class ProductService {
     this.params.set('query', query);
     return this.http.get(this.urlProduct + '/search', {headers: this.headers, search: this.params}).map(res => res.json());
   }
+
+  public findByBarCode(barCode: string): Observable<Product> {
+    this.params = new URLSearchParams();
+    this.params.set('barCode', barCode);
+    return this.http.get(this.urlProduct + '/barCode', {headers: this.headers, search: this.params})
+      .map(res => res.json());
+  }
+
 }

@@ -19,7 +19,7 @@
   </div>
 </div>
 
-<div class="col-lg-12 col-md-12" *ngIf="isLooged">
+<div class="col-lg-12 col-md-12" *ngIf="isLooged && employee?.isG2Interno">
   <div class="row">
     <div class="col-lg-8 col-md-8" style="background-color: #FFFFAB;">
       <div class="row">
@@ -55,13 +55,6 @@
             <option value="GRATUITO">Gratuito</option>
           </select>
         </div>
-        <!--<div class="col-lg-4 col-md-4 form-group">
-          <label for="inputClientVersionFilter" class="control-label">Versão</label>
-          <select name="version" id="inputClientVersionFilter" class="form-control"
-                  [(ngModel)]="liberationFilter.version">
-            <option *ngFor="let version of listVersions" [ngValue]="version">{{version}}</option>
-          </select>
-        </div>-->
       </div>
     </div>
     <div class="col-lg-4 col-md-4 form-group">
@@ -78,7 +71,12 @@
   <ng2-slim-loading-bar [color]="'#204d74'" [height]="'4px'"></ng2-slim-loading-bar>
 </div>
 
-<div class="row" *ngIf="isLooged">
+<div class="row" *ngIf="isLooged && !employee?.isG2Interno">
+  <span>Usuário logado não tem permissão de liberação de clientes</span>
+  <button (click)="loggof()" class="btn btn-default pull-right"><span class="fa fa-sign-out"></span>Sair</button>
+</div>
+
+<div class="row" *ngIf="isLooged && employee?.isG2Interno">
   <div class="col-lg-12 col-md-12" *ngIf="listClients.length > 0">
     <table class="table table-bordered table-striped">
       <thead>

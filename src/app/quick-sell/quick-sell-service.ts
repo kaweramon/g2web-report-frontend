@@ -6,7 +6,8 @@ import {QuickSell} from './quick-sell';
 @Injectable()
 export class QuickSellService {
 
-  private urlQuickSellReport: string = 'http://localhost:8080/quicksell/';
+  // private urlQuickSellReport: string = 'http://localhost:8080/quicksell/';
+  private urlQuickSellReport = '/quicksell/';
   headers = new Headers({ 'Content-Type': 'application/json' });
   private params = new URLSearchParams();
 

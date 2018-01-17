@@ -6,7 +6,8 @@ import {ProductGroup} from './product-group';
 @Injectable()
 export class ProductGroupService {
 
-  private urlProductGroups = 'http://localhost:8080/product-group';
+  // private urlProductGroups = 'http://localhost:8080/product-group';
+  private urlProductGroups = '/product-group';
   headers = new Headers({ 'Content-Type': 'application/json' });
 
   constructor(private http: Http) { }

@@ -1,6 +1,5 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {LiberationService} from './liberation.service';
-import {Liberation} from './liberation';
 import * as moment from 'moment';
 import {LiberationFilters} from './liberation-filters';
 import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
@@ -17,8 +16,7 @@ import {LocalStorageService} from 'angular-2-local-storage';
   templateUrl: './liberation.component.html',
   styleUrls: ['./liberation.component.css']
 })
-export class LiberationComponent {
-
+export class LiberationComponent implements OnInit{
   public listClients: Array<Client> = [];
 
   public liberationFilter: LiberationFilters;
@@ -39,12 +37,28 @@ export class LiberationComponent {
               private localStorageService: LocalStorageService) {
     this.liberationFilter = new LiberationFilters();
     this.employee = new Employee();
+
+    this.getVersions();
+  }
+
+  ngOnInit(): void {
+    if (this.employee === undefined || this.employee === null) {
+      this.employee = new Employee();
+    }
     if (this.localStorageService.get('employee') !== null && this.localStorageService.get('employee') !== undefined) {
       this.isLooged = true;
+      this.employee.id = this.localStorageService.get('employee')['id'];
+      this.employee.name = this.localStorageService.get('employee')['name'];
+      if (this.localStorageService.get('employee')['isG2Interno'] === undefined ||
+        this.localStorageService.get('employee')['isG2Interno'] === null) {
+        this.employeeService.isG2Interno().subscribe(isG2Interno => {
+          this.employee.isG2Interno = isG2Interno;
+        });
+      }
+      this.employee.isG2Interno = this.localStorageService.get('employee')['isG2Interno'];
     } else {
       this.isLooged = false;
     }
-    this.getVersions();
   }
 
   private getVersions(): void {
@@ -143,8 +157,12 @@ export class LiberationComponent {
 
   public login(): void {
     this.employeeService.login(this.employee.login, this.employee.password).subscribe(employee => {
-      this.localStorageService.set('employee', employee);
-      this.isLooged = true;
+      this.employeeService.isG2Interno().subscribe(isG2Interno => {
+        employee.isG2Interno = isG2Interno;
+        this.localStorageService.set('employee', employee);
+        this.employee = Object.assign({}, employee);
+        this.isLooged = true;
+      });
     }, error => {
     });
   }
@@ -152,6 +170,7 @@ export class LiberationComponent {
   public loggof(): void {
     this.isLooged = false;
     this.localStorageService.set('employee', null );
+    this.employee = new Employee();
   }
 
 }

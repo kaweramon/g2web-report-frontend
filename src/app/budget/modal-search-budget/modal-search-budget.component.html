@@ -2,16 +2,16 @@
   <div class="modal-content">
     <div class="modal-header">
       <h4 class="modal-title pull-left">Procurar Orçamento</h4>
-      <button type="button" class="close pull-right" (click)="modal.hide();" aria-label="Close">
+      <button type="button" class="close pull-right" (click)="closeAndResetFields();" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
     <div class="modal-body">
       <div class="row">
         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-          <label for="inputBudgetId" class="control-label">Código:</label>
+          <label for="inputBudgetSearchById" class="control-label">Código:</label>
           <input type="number" class="form-control" name="id" [(ngModel)]="budgetFilter.id"
-                 (keyup.enter)="searchBudget()" id="inputBudgetId">
+                 (keyup.enter)="searchBudget()" id="inputBudgetSearchById">
         </div>
         <div class="col-lg-5 col-md-5  col-sm-5 col-xs-5">
           <label for="inputBudgetSaleDateFrom" class="control-label">De:</label>
@@ -40,9 +40,10 @@
       </div>
       <div class="row">
         <div class="col-lg-12 col-md-12  col-sm-12 col-xs-12">
-          <button class="btn btn-primary pull-right" (click)="searchBudget()" style="margin-top: 25px;">
+          <button class="btn btn-primary pull-right" id="btnSearchBudget" (click)="searchBudget()" style="margin-top: 25px;">
+            <span *ngIf="loadingBudget" class="fa fa-spinner fa-spin"></span>&nbsp;
+            Pesquisar&nbsp;
             <span class="fa fa-search"></span>
-            Pesquisar
           </button>
         </div>
       </div>
@@ -67,7 +68,7 @@
           </tbody>
         </table>
       </div>
-      <div class="row" >
+      <div class="row" *ngIf="listBudgets !== undefined && listBudgets.length > 0">
         <div class="col-lg-12 col-md-12">
           <pagination-controls previousLabel="Anterior"
                                nextLabel="Próximo"
@@ -77,7 +78,7 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-default" (click)="modal.hide();">Fechar</button>
+      <button class="btn btn-default" (click)="closeAndResetFields();">Fechar</button>
     </div>
   </div>
 </div>

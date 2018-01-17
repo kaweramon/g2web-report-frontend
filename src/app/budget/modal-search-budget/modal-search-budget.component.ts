@@ -5,6 +5,7 @@ import {BudgetService} from '../budget.service';
 import {ToastsManager} from 'ng2-toastr';
 import {ModalDirective} from 'ngx-bootstrap';
 import * as moment from 'moment';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-modal-search-budget',
@@ -25,7 +26,13 @@ export class ModalSearchBudgetComponent {
   @Output()
   public notify: EventEmitter<any> = new EventEmitter<any>();
 
+  public loadingBudget = false;
+
   constructor(private service: BudgetService, public toastr: ToastsManager) {
+    this.initBudgetFilter();
+  }
+
+  public initBudgetFilter(): void {
     this.budgetFilter = new BudgetFilter();
     this.budgetFilter.saleDateFrom = moment().format('DD/MM/YYYY');
     this.budgetFilter.saleDateTo = moment().format('DD/MM/YYYY');
@@ -50,20 +57,34 @@ export class ModalSearchBudgetComponent {
     if (this.budgetFilter.obs !== null && this.budgetFilter.obs !== undefined && this.budgetFilter.obs.length > 0) {
       query += ',obs=' + this.budgetFilter.obs;
     }
+    $('#btnSearchBudget').prop('disabled', 'disabled');
+    this.loadingBudget = true;
     this.service.search(query).subscribe(result => {
       this.listBudgets = result;
+      $('#btnSearchBudget').prop('disabled', false);
+      this.loadingBudget = false;
     }, error => {
+      $('#btnSearchBudget').prop('disabled', false);
+      this.loadingBudget = false;
       this.toastr.error(error.json().message, 'Error');
     });
   }
 
   public selectBudget(budget: Budget): void {
     this.modal.hide();
+    this.listBudgets = [];
+    this.budgetFilter = new BudgetFilter();
     this.notify.emit({budget: budget});
   }
 
   public getConvertedDate(date: Date): string {
     return moment(date).add(1, 'd').format('DD/MM/YYYY');
+  }
+
+  public closeAndResetFields(): void {
+    this.modal.hide();
+    this.listBudgets = [];
+    this.budgetFilter = new BudgetFilter();
   }
 
 }

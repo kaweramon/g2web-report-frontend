@@ -4,8 +4,8 @@ import {ReportComponent} from './report/report.component';
 import {BudgetComponent} from "./budget/budget.component";
 
 const APP_ROUTES: Routes = [
-  { path: '', component: ReportComponent },
-  { path: 'orcamento', component: BudgetComponent }
+  { path: 'relatorio', component: ReportComponent },
+  { path: '', component: BudgetComponent }
 ];
 
 export const routing: ModuleWithProviders = RouterModule.forRoot(APP_ROUTES);

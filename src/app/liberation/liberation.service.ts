@@ -6,7 +6,8 @@ import {Liberation} from './liberation';
 @Injectable()
 export class LiberationService {
 
-  private urlLiberationReport = 'http://localhost:8080/liberation/';
+  // private urlLiberationReport = 'http://localhost:8080/liberation/';
+  private urlLiberationReport = '/liberation/';
   headers = new Headers({ 'Content-Type': 'application/json' });
   private params = new URLSearchParams();
 

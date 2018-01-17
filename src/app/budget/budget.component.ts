@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Budget} from './budget';
 import {EmployeeService} from '../employee/employee.service';
 import {Employee} from '../employee/employee';
@@ -8,18 +8,24 @@ import {ModalDirective} from 'ngx-bootstrap';
 import {Client} from '../client/client';
 import {Product} from '../product/product';
 import * as moment from 'moment';
+import * as $ from 'jquery';
 import {ToastsManager} from 'ng2-toastr';
 import {ProductOthers} from '../product/product-others';
 import {BudgetProducts} from './budget-products';
 import {BudgetProductsService} from './budget-products.service';
 import {ClientService} from '../client/client.service';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {ModalSearchBudgetComponent} from './modal-search-budget/modal-search-budget.component';
+import {Router} from '@angular/router';
+import {ProductService} from '../product/product.service';
+import {isNumeric} from 'rxjs/util/isNumeric';
 
 @Component({
   selector: 'app-budget',
   templateUrl: './budget.component.html',
   styleUrls: ['./budget.component.css']
 })
-export class BudgetComponent {
+export class BudgetComponent implements OnInit {
 
   public budget: Budget;
 
@@ -64,9 +70,17 @@ export class BudgetComponent {
 
   public currentBudgetProductPrice: number;
 
+  public formBudgetProduct: FormGroup;
+
+  @ViewChild(ModalSearchBudgetComponent)
+  public modalSearchBudgetComponent: ModalSearchBudgetComponent;
+
+  public barCode = '';
+
   constructor(private employeeService: EmployeeService, private localStorageService: LocalStorageService,
-              private budgetService: BudgetService, public toastr: ToastsManager,
-              private budgetProductsService: BudgetProductsService, private clientService: ClientService) {
+              private budgetService: BudgetService, public toastr: ToastsManager, private formBuilder: FormBuilder,
+              private budgetProductsService: BudgetProductsService, private clientService: ClientService,
+              private router: Router, private productService: ProductService) {
     this.employee = new Employee();
     this.salesman = new Employee();
     this.budgetProduct = new BudgetProducts();
@@ -82,13 +96,30 @@ export class BudgetComponent {
     }
   }
 
+  ngOnInit(): void {
+    this.modalSearchBudgetComponent = new ModalSearchBudgetComponent(this.budgetService, this.toastr);
+    this.formBudgetProduct = this.formBuilder.group({
+      'productName': [this.budgetProduct.productName],
+      'barCodeProduct': [this.budgetProduct.barCodeProduct],
+      'quantity': [this.budgetProduct.quantity],
+      'unity': [this.budgetProduct.unity],
+      'priceValue': [this.budgetProduct.priceValue],
+      'discountValue': [this.budgetProduct.discountValue],
+      'increaseValue': [this.budgetProduct.increaseValue],
+      'discountPercent': [this.budgetProduct.discountPercent],
+      'subTotal': [this.budgetProduct.subTotal],
+      'productId': [this.budgetProduct.productId]
+    });
+    this.formBudgetProduct.disable();
+  }
+
   public login(): void {
     this.employeeService.login(this.employee.login, this.employee.password).subscribe(employee => {
-      this.employee = Object.assign({}, employee);
       this.salesman = Object.assign({}, employee);
-      this.budgetService.getLast().subscribe(result => {
-        this.budget = result;
+      this.employeeService.isG2Interno().subscribe(isG2Interno => {
+        employee.isG2Interno = isG2Interno;
         this.localStorageService.set('employee', employee);
+        this.employee = Object.assign({}, employee);
         this.isLoged = true;
       });
     }, error => {
@@ -99,6 +130,7 @@ export class BudgetComponent {
   public addBudget(): void {
     this.budgetService.getLast().subscribe(result => {
       this.budget = new Budget();
+      this.formBudgetProduct.enable();
       this.saleDateStr = moment().format('DD/MM/YYYY');
       this.budget.budgetCounter = result.budgetCounter + 1;
       this.budget.status = 'Andamento';
@@ -108,7 +140,9 @@ export class BudgetComponent {
       this.budget.delivered = 'SIM';
       this.budget.salesman = this.salesman.name;
       this.budgetService.create(this.budget).subscribe(budget => {
-        this.budget = Object.assign({}, budget);
+        this.budget = budget;
+        $('#btnUpdateSalesMan').prop('disabled', false);
+        $('#btnUpdateClient').prop('disabled', false);
         this.modalSearchClient.show();
       });
     });
@@ -118,21 +152,25 @@ export class BudgetComponent {
     if (msg.client) {
       this.client = msg.client;
     }
-    if (msg.product) {
-      this.product = msg.product;
+    if (msg.product && this.budget !== undefined && this.budget !== null) {
+      this.product = Object.assign({}, msg.product);
       this.budgetProduct = new BudgetProducts();
-      this.budgetProduct.priceValue = msg.product.priceValue;
-      this.currentBudgetProductPrice = msg.product.priceValue;
+      this.budgetProduct.priceValue = this.product.priceValue;
+      this.budgetProduct.subTotal = this.product.priceValue;
+      this.currentBudgetProductPrice = this.product.priceValue;
       this.budgetProduct.quantity = 1;
       this.budgetProduct.discountValue = 0;
+      this.budgetProduct.discountPercent = 0;
       this.budgetProduct.increaseValue = 0;
-      this.budgetProduct.productName = msg.product.name;
-      this.budgetProduct.ncm = msg.product.productOther ? msg.product.productOther.ncm  : '';
+      this.budgetProduct.increasePercent = 0;
+      this.budgetProduct.productName = this.product.name;
+      this.budgetProduct.ncm = this.product.productOther ? msg.product.productOther.ncm  : '';
       this.budgetProduct.cfop = msg.product.productOther ? msg.product.productOther.cfop : '';
       this.budgetProduct.barCodeProduct = msg.product.barCode;
-      this.budgetProduct.unity = msg.product.unity;
-      this.budgetProduct.productId = msg.product.id;
+      this.budgetProduct.unity = this.product.unity;
+      this.budgetProduct.productId = this.product.id;
       this.budgetProduct.budgetId = this.budget.id;
+
     }
     if (msg.salesman) {
       this.salesman = msg.salesman;
@@ -140,6 +178,9 @@ export class BudgetComponent {
     if (msg.budget) {
       this.budget = msg.budget;
       this.retrieveBudgetData();
+      this.formBudgetProduct.enable();
+      $('#btnUpdateSalesMan').prop('disabled', false);
+      $('#btnUpdateClient').prop('disabled', false);
     }
     if (msg === 'removeBudget') {
       this.deleteBudget();
@@ -162,22 +203,6 @@ export class BudgetComponent {
     if (this.budget.increaseValue !== null && this.budget.increaseValue !== undefined) {
       this.increaseValue = this.budget.increaseValue;
     }
-    /*if (this.budget.listBudgetProducts !== null && this.budget.listBudgetProducts.length > 0) {
-      this.budget.listBudgetProducts.forEach(budgetProduct => {
-        const product: Product = new Product();
-        product.productOther = new ProductOthers();
-        product.name = budgetProduct['productName'];
-        product.id = budgetProduct['productId'];
-        product.quantity = budgetProduct['quantity'];
-        product.priceValue = budgetProduct['priceValue'];
-        product.productOther.cfop = budgetProduct['cfop'];
-        product.productOther.ncm = budgetProduct['ncm'];
-        product.productOther.cstNumber = budgetProduct['cst'];
-        product.barCode = budgetProduct['barCodeProduct'];
-        this.totalProducts += (product.priceValue * product.quantity);
-        this.listBudgetProducts.push(product);
-      });
-    }*/
     if (this.budget.clientId !== null && this.budget.clientId !== undefined) {
       this.clientService.searchClients('id=' + this.budget.clientId, false).subscribe(result => {
         if (result.length > 0) {
@@ -200,23 +225,18 @@ export class BudgetComponent {
     this.budget.discountValue = this.budget.discountValue ? this.budget.discountValue : 0;
     this.budget.increasePercent = this.budget.increasePercent ? this.budget.increasePercent : 0;
     this.budget.discountPercent = this.budget.discountPercent ? this.budget.discountPercent : 0;
-    /*if (this.budget.increaseValue) {
-      this.increaseValue = this.budget.increaseValue;
-    }
-    if (this.budget.discountValue) {
-      this.discountValue = this.budget.discountValue;
-    }*/
   }
 
   public removeProduct(index: number): void {
-    this.totalProducts -= (((this.listBudgetProducts[index].priceValue - this.listBudgetProducts[index].discountValue)
-    + this.listBudgetProducts[index].increaseValue) * this.listBudgetProducts[index].quantity);
+    this.totalProducts -= this.listBudgetProducts[index].subTotal;
     this.listBudgetProducts.splice(index, 1);
   }
 
   public logOut(): void {
     this.localStorageService.remove('employee');
     this.isLoged = false;
+    this.resetBuget();
+    this.resetEmployee();
   }
 
   public resetEmployee(): void {
@@ -233,13 +253,14 @@ export class BudgetComponent {
     this.totalProducts = 0;
     this.currentBudgetProductPrice = 0;
     this.salesman = Object.assign({}, this.employee);
+    $('#btnUpdateSalesMan').prop('disabled', 'disabled');
+    $('#btnUpdateClient').prop('disabled', 'disabled');
   }
 
   public addProduct(): void {
+    this.barCode = '';
     if (this.budgetProduct.priceValue) {
-      this.totalProducts += (((this.currentBudgetProductPrice - this.budgetProduct.discountValue)
-        + this.budgetProduct.increaseValue)
-        * this.budgetProduct.quantity);
+      this.totalProducts += this.budgetProduct.subTotal;
     }
     let budgetProductSearched = undefined;
     this.listBudgetProducts.forEach(budgetProduct => {
@@ -251,7 +272,9 @@ export class BudgetComponent {
       this.listBudgetProducts.push(Object.assign({}, this.budgetProduct));
     } else {
       budgetProductSearched.quantity += this.budgetProduct.quantity;
+      budgetProductSearched.subTotal += this.budgetProduct.subTotal;
     }
+    this.budgetProduct = new BudgetProducts();
   }
 
   public saveBuget(): void {
@@ -271,8 +294,6 @@ export class BudgetComponent {
     this.budget.salesman = this.employee.id.toString() + ' - ' + this.employee.name;
     this.budget.hour = new Date();
     this.budget.type = 'Venda';
-    // this.budget.discountValue = this.discountValue;
-    // this.budget.increaseValue = this.increaseValue;
     this.budget.operatorId = this.employee.id;
     this.budget.operatorName = this.employee.name;
     this.budget.status = 'Concluido';
@@ -312,14 +333,121 @@ export class BudgetComponent {
     }
   }
 
-  public calculateIncreaseAndDiscountProduct(productPrice): void {
+  public calculateSubTotal(productPrice): void {
     if (productPrice > this.currentBudgetProductPrice) {
-      this.budgetProduct.increaseValue = (productPrice - this.currentBudgetProductPrice);
-      this.budgetProduct.discountValue = 0;
-    } else {
-      this.budgetProduct.discountValue = (this.currentBudgetProductPrice - productPrice);
-      this.budgetProduct.increaseValue = 0;
+      this.budgetProduct.subTotal =
+        ((productPrice - (productPrice * this.budgetProduct.discountPercent) / 100) * this.budgetProduct.quantity);
     }
+  }
+
+  public calculateSubTotalOnChangeQuantity(quantity): void {
+    if (quantity > 0) {
+      if (this.budgetProduct.increaseValue < this.budgetProduct.discountValue) {
+        this.budgetProduct.subTotal = ((this.budgetProduct.priceValue -
+          (this.budgetProduct.discountValue - this.budgetProduct.increaseValue)) * quantity);
+      } else {
+        this.budgetProduct.subTotal = ((this.budgetProduct.priceValue +
+          (this.budgetProduct.increaseValue - this.budgetProduct.discountValue)) * quantity);
+      }
+    }
+  }
+
+  public calculateDiscountValue(productDiscountPercent): void {
+    if (productDiscountPercent > 0 && productDiscountPercent <= 100) {
+      this.budgetProduct.discountValue = ((this.budgetProduct.priceValue * productDiscountPercent) / 100);
+      if (productDiscountPercent > this.budgetProduct.increasePercent) {
+        this.budgetProduct.subTotal = ((this.budgetProduct.priceValue -
+          (((this.budgetProduct.priceValue * productDiscountPercent) / 100) - this.budgetProduct.increaseValue))
+          * this.budgetProduct.quantity);
+      } else {
+        this.budgetProduct.subTotal = ((this.budgetProduct.priceValue +
+          (this.budgetProduct.increaseValue - ((this.budgetProduct.priceValue * productDiscountPercent) / 100)))
+          * this.budgetProduct.quantity);
+      }
+    }
+    if (productDiscountPercent === 0) {
+      this.budgetProduct.discountValue = 0;
+      this.budgetProduct.subTotal = ((this.budgetProduct.priceValue + this.budgetProduct.increaseValue)
+        * this.budgetProduct.quantity);
+    }
+  }
+
+  public calculateIncreaseValue(productIncreasePercent): void {
+    if (productIncreasePercent > 0 && productIncreasePercent <= 100) {
+      this.budgetProduct.increaseValue = ((this.budgetProduct.priceValue * productIncreasePercent) / 100);
+      if (productIncreasePercent > this.budgetProduct.discountPercent) {
+        this.budgetProduct.subTotal = ((this.budgetProduct.priceValue +
+          (((this.budgetProduct.priceValue * productIncreasePercent) / 100) - this.budgetProduct.discountValue))
+          * this.budgetProduct.quantity);
+      } else {
+        this.budgetProduct.subTotal = ((this.budgetProduct.priceValue -
+          (this.budgetProduct.discountValue - ((this.budgetProduct.priceValue * productIncreasePercent) / 100)))
+          * this.budgetProduct.quantity);
+      }
+    }
+    if (productIncreasePercent === 0) {
+      this.budgetProduct.increaseValue = 0;
+      this.budgetProduct.subTotal = ((this.budgetProduct.priceValue - this.budgetProduct.discountValue)
+        * this.budgetProduct.quantity);
+    }
+  }
+
+  public searchByBarCode(): void {
+    if (this.barCode !== undefined && this.barCode.length > 0 && isNumeric(this.barCode)) {
+      this.productService.findByBarCode(this.barCode).subscribe(product => {
+        this.budgetProduct = new BudgetProducts();
+        this.product = Object.assign({}, product);
+        this.budgetProduct.priceValue = product.priceValue;
+        this.budgetProduct.subTotal = product.priceValue;
+        this.currentBudgetProductPrice = product.priceValue;
+        this.budgetProduct.quantity = 1;
+        this.budgetProduct.discountValue = 0;
+        this.budgetProduct.increaseValue = 0;
+        this.budgetProduct.discountPercent = 0;
+        this.budgetProduct.productName = product.name;
+        this.budgetProduct.ncm = product.productOther ? product.productOther.ncm  : '';
+        this.budgetProduct.cfop = product.productOther ? product.productOther.cfop : '';
+        this.budgetProduct.unity = product.unity;
+        this.budgetProduct.productId = product.id;
+        this.budgetProduct.budgetId = this.budget.id;
+        this.budgetProduct.barCodeProduct = product.barCode;
+      }, error => {
+        this.toastr.error(error.json().message, 'Erro');
+      });
+    }
+  }
+
+  public test(event): void {
+    if (event !== null && event !== undefined && event.target !== undefined && event.target !== null &&
+        event.target.value !== undefined
+      && isNumeric(event.target.value)) {
+      this.barCode = event.target.value;
+    }
+  }
+
+  public showModalSearchProduct(): void {
+    this.modalSearchProduct.show();
+    setTimeout(() => {
+      $('#inputProductSearchByBarCode').focus();
+    }, 1000);
+
+  }
+
+  public onShowModalSearchBudget($event: ModalDirective): void {
+    $('#inputBudgetSearchById').focus();
+    this.modalSearchBudgetComponent.initBudgetFilter();
+  }
+
+  public onShowModalSearchProduct(): void {
+    $('#inputProductSearchByBarCode').focus();
+  }
+
+  public onShowModalSearchClient(): void {
+    $('#inputClientName').focus();
+  }
+
+  public goToReports(): void {
+    this.router.navigateByUrl('/relatorio');
   }
 
 }

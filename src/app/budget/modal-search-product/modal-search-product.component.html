@@ -2,26 +2,46 @@
   <div class="modal-content">
     <div class="modal-header">
       <h4 class="modal-title pull-left">Procurar Produto</h4>
-      <button type="button" class="close pull-right" (click)="modal.hide();" aria-label="Close">
+      <button type="button" class="close pull-right" (click)="closeModal()" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
     <div class="modal-body">
       <div class="row">
-        <div class="col-lg-7 col-md-7 col-xs-12">
-          <label for="inputClientName" class="control-label">Nome / Referência</label>
-          <input type="text" class="form-control" name="clientNameFantasy" id="inputClientName" placeholder="Nome / Referência"
+        <div class="col-lg-6 col-md-6 col-xs-6">
+          <label for="inputProductSearchByBarCode" class="control-label">Código de Barras</label>
+          <input type="text" class="form-control" placeholder="Código de Barras" name="barCode"
+                 id="inputProductSearchByBarCode" [(ngModel)]="product.barCode" (keyup.enter)="searchProduct()">
+        </div>
+        <div class="col-lg-6 col-md-6 col-xs-6">
+          <label for="inputProductSearchByNameOrReference" class="control-label">Nome / Referência</label>
+          <input type="text" class="form-control" name="productNameReference"
+                 id="inputProductSearchByNameOrReference" placeholder="Nome / Referência"
                  [(ngModel)]="productNameReference" (keyup.enter)="searchProduct()">
         </div>
-        <div class="col-lg-2 col-md-2 col-xs-12">
+      </div>
+      <div class="row" style="display: flex; align-items: flex-end;">
+        <div class="col-lg-3 col-md-3 col-xs-4">
           <label for="inputId" class="control-label">Código</label>
-          <input type="number" class="form-control" id="inputId" name="clientId" [(ngModel)]="productId" placeholder="Código"
-                 (keyup.enter)="searchProduct()">
+          <input type="number" class="form-control" id="inputId" name="id" [(ngModel)]="product.id"
+                 placeholder="Código" (keyup.enter)="searchProduct()">
         </div>
-        <div class="col-lg-3 col-md-3 col-xs-12">
-          <button class="btn btn-primary pull-right" (click)="searchProduct()" style="margin-top: 25px;">
-            <span class="fa fa-search"></span>
-            Pesquisar
+        <div class="col-lg-3">
+          <label for="inputProductSearchByPriceValue" class="control-label">Valor</label>
+          <input type="text" class="form-control" id="inputProductSearchByPriceValue" name="priceValue"
+                 [(ngModel)]="product.priceValue" placeholder="Valor"
+                 (keyup.enter)="searchProduct()" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }">
+        </div>
+        <div class="col-lg-3 col-md-3">
+          <button class="btn btn-default pull-right" (click)="cleanSearchProduct()">
+            <span class="fa fa-eraser"></span>
+            Limpar
+          </button>
+        </div>
+        <div class="col-lg-3 col-md-3 col-xs-3">
+          <button class="btn btn-primary pull-right" id="btnSearchProducts" (click)="searchProduct()">
+            <span *ngIf="loadingProducts" class="fa fa-spinner fa-spin"></span>&nbsp;
+            Pesquisar&nbsp;<span class="fa fa-search"></span>
           </button>
         </div>
       </div>
@@ -40,12 +60,13 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let product of listProducts | paginate: { itemsPerPage: 5, currentPage: p }" (click)="selectProduct(product)">
+          <tr *ngFor="let product of listProducts | paginate: { itemsPerPage: 5, currentPage: p }"
+              (click)="selectProduct(product)">
             <td class="text-center">{{product.id}}</td>
             <td>{{product.name}}</td>
             <td class="hidden-xs">{{product.reference}}</td>
             <td class="hidden-xs">{{product.barCode}}</td>
-            <td class="text-center">{{product.priceValue}}</td>
+            <td class="text-center">{{product.priceValue | number : '1.2-2'}}</td>
             <td class="text-center hidden-xs">{{product.productOther.ncm}}</td>
             <td class="text-center hidden-xs">{{product.productOther.cfop}}</td>
             <td class="text-center">{{product.productOther.cstNumber}}</td>
@@ -63,7 +84,7 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-default" (click)="modal.hide();">Fechar</button>
+      <button class="btn btn-default" (click)="closeModal()">Fechar</button>
     </div>
   </div>
 </div>
