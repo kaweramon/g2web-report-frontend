@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import {Headers, Http, URLSearchParams} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import {QuickSell} from './quick-sell';
+import {AppConstantsSettings} from "../util/app-constants-settings";
 
 @Injectable()
 export class QuickSellService {
 
   // private urlQuickSellReport: string = 'http://localhost:8080/quicksell/';
-  private urlQuickSellReport = '/quicksell/';
+  private urlQuickSellReport = AppConstantsSettings.API_URL + 'quicksell/';
   headers = new Headers({ 'Content-Type': 'application/json' });
   private params = new URLSearchParams();
 

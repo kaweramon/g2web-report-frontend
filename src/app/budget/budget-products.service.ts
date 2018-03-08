@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import {Headers, Http, Response, URLSearchParams} from '@angular/http';
 import {BudgetProducts} from './budget-products';
 import {Observable} from 'rxjs/Observable';
+import {AppConstantsSettings} from "../util/app-constants-settings";
 
 @Injectable()
 export class BudgetProductsService {
 
-  private urlBudgetProducts = 'http://localhost:8080/budget-products';
+  private urlBudgetProducts = AppConstantsSettings.API_URL + 'budget-products';
   headers = new Headers({ 'Content-Type': 'application/json' });
   private params = new URLSearchParams();
 

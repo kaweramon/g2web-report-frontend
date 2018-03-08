@@ -2,14 +2,15 @@ import {Injectable} from '@angular/core';
 import {Headers, Http, URLSearchParams} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import {Employee} from './employee';
+import {AppConstantsSettings} from "../util/app-constants-settings";
 
 @Injectable()
 export class EmployeeService {
 
-  private urlEmployee = 'http://localhost:8080/employee';
-  // private urlEmployee = '/employee';
-  private urlIsG2Interno = 'http://localhost:8080/' + 'isG2Interno';
-  // private urlIsG2Interno = '/isG2Interno';
+  // private urlEmployee = 'http://localhost:8080/employee';
+  private urlEmployee = AppConstantsSettings.API_URL + 'employee';
+  // private urlIsG2Interno = 'http://localhost:8080/' + 'isG2Interno';
+  private urlIsG2Interno = '/isG2Interno';
   headers = new Headers({ 'Content-Type': 'application/json' });
   private params = new URLSearchParams();
 

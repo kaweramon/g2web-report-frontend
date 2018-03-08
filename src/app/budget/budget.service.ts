@@ -7,8 +7,8 @@ import {AppConstantsSettings} from "../util/app-constants-settings";
 @Injectable()
 export class BudgetService {
 
-  private urlBudget = 'http://localhost:8080/budget';
-  // private urlBudget = '/budget';
+  // private urlBudget = 'http://localhost:8080/budget';
+  private urlBudget = AppConstantsSettings.API_URL + 'budget';
   headers = new Headers({ 'Content-Type': 'application/json' });
   private params = new URLSearchParams();
 

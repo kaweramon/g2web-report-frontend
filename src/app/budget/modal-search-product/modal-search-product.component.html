@@ -1,4 +1,4 @@
-<div class="modal-dialog modal-md">
+<div class="modal-dialog modal-lg">
   <div class="modal-content">
     <div class="modal-header">
       <h4 class="modal-title pull-left">Procurar Produto</h4>
@@ -46,33 +46,37 @@
         </div>
       </div>
       <div class="row" *ngIf="listProducts !== undefined && listProducts.length > 0">
-        <table class="table table-striped">
-          <thead>
-          <tr>
-            <th class="text-center">Cód.</th>
-            <th>Discriminação</th>
-            <th class="hidden-xs">Referência</th>
-            <th class="hidden-xs">Cód/Barra</th>
-            <th class="text-center">Valor</th>
-            <th class="text-center hidden-xs">NCM</th>
-            <th class="text-center hidden-xs">CFOP</th>
-            <th class="text-center">CST</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let product of listProducts | paginate: { itemsPerPage: 5, currentPage: p }"
-              (click)="selectProduct(product)">
-            <td class="text-center">{{product.id}}</td>
-            <td>{{product.name}}</td>
-            <td class="hidden-xs">{{product.reference}}</td>
-            <td class="hidden-xs">{{product.barCode}}</td>
-            <td class="text-center">{{product.priceValue | number : '1.2-2'}}</td>
-            <td class="text-center hidden-xs">{{product.productOther.ncm}}</td>
-            <td class="text-center hidden-xs">{{product.productOther.cfop}}</td>
-            <td class="text-center">{{product.productOther.cstNumber}}</td>
-          </tr>
-          </tbody>
-        </table>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th class="text-center">Cód.</th>
+              <th>Discriminação</th>
+              <th class="hidden-xs">Referência</th>
+              <th>Cód/Barra</th>
+              <th class="hidden-xs">Est.</th>
+              <th class="text-center">Valor</th>
+              <th class="text-center hidden-xs hidden-sm">NCM</th>
+              <th class="text-center hidden-xs">CFOP</th>
+              <th class="text-center">CST</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let product of listProducts | paginate: { itemsPerPage: 5, currentPage: p }"
+                (click)="selectProduct(product)">
+              <td class="text-center">{{product.id}}</td>
+              <td>{{product.name}}</td>
+              <td class="hidden-xs">{{product.reference}}</td>
+              <td class="text-center">{{product.barCode}}</td>
+              <td class="">{{product.stock}}</td>
+              <td class="text-center">{{product.priceValue | number : '1.2-2'}}</td>
+              <td class="text-center hidden-xs hidden-sm">{{product.productOther.ncm}}</td>
+              <td class="text-center hidden-xs">{{product.productOther.cfop}}</td>
+              <td class="text-center">{{product.productOther.cstNumber}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div class="row" *ngIf="listProducts !== undefined && listProducts.length > 0">
         <div class="col-lg-12 col-md-12">

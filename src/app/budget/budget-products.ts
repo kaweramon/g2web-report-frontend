@@ -15,5 +15,6 @@ export class BudgetProducts {
   public cfop: string;
   public cst: number;
   public ncm: string;
+  public stock: number;
   public barCodeProduct: string;
 }

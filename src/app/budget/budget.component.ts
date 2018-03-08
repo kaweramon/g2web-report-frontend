@@ -159,6 +159,7 @@ export class BudgetComponent implements OnInit {
       this.budgetProduct.subTotal = this.product.priceValue;
       this.currentBudgetProductPrice = this.product.priceValue;
       this.budgetProduct.quantity = 1;
+      this.budgetProduct.stock = this.product.stock;
       this.budgetProduct.discountValue = 0;
       this.budgetProduct.discountPercent = 0;
       this.budgetProduct.increaseValue = 0;

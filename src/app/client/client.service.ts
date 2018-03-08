@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import {Headers, Http, URLSearchParams} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import {Client} from './client';
+import {AppConstantsSettings} from "../util/app-constants-settings";
 
 @Injectable()
 export class ClientService {
 
-  private urlClient = 'http://localhost:8080/client';
-  // private urlClient: string = '/client';
+  // private urlClient = 'http://localhost:8080/client';
+  private urlClient: string = AppConstantsSettings.API_URL + 'client';
   headers = new Headers({ 'Content-Type': 'application/json' });
   private params: URLSearchParams = new URLSearchParams();
 

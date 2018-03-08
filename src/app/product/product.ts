@@ -13,6 +13,7 @@ export class Product {
   public quantity: number;
   public discount: number;
   public increase: number;
+  public stock: number;
   public productOther: ProductOthers;
   public productGroup: ProductGroup;
   public productFamily: ProductFamily;
